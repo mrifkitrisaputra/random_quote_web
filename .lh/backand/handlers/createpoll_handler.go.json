@@ -3,7 +3,7 @@
     "activeCommit": 0,
     "commits": [
         {
-            "activePatchIndex": 30,
+            "activePatchIndex": 32,
             "patches": [
                 {
                     "date": 1747213500217,
@@ -128,6 +128,14 @@
                 {
                     "date": 1747285573591,
                     "content": "Index: \n===================================================================\n--- \n+++ \n@@ -4,8 +4,9 @@\n     \"encoding/json\"\r\n     \"net/http\"\r\n \r\n     \"backand/services\"\r\n+\r\n )\r\n \r\n func CreatePollHandler(w http.ResponseWriter, r *http.Request) {\r\n     var input struct {\r\n"
+                },
+                {
+                    "date": 1747292493330,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -4,39 +4,27 @@\n     \"encoding/json\"\r\n     \"net/http\"\r\n \r\n     \"backand/services\"\r\n-\r\n )\r\n \r\n func CreatePollHandler(w http.ResponseWriter, r *http.Request) {\r\n-    var input struct {\r\n-        Title                string   `json:\"title\"`\r\n-        Description          string   `json:\"description\"`\r\n-        Options              []string `json:\"options\"`\r\n-        ExpiresAt            string   `json:\"expires_at\"`\r\n-        AllowRealtimeResults bool     `json:\"allow_realtime_results\"`\r\n-    }\r\n-\r\n+    var input models.CreatePollRequest\r\n     if err := json.NewDecoder(r.Body).Decode(&input); err != nil {\r\n         http.Error(w, \"Invalid request payload\", http.StatusBadRequest)\r\n         return\r\n     }\r\n \r\n-    pollID, pollURL, err := services.CreatePoll(\r\n-        input.Title,\r\n-        input.Description,\r\n-        input.ExpiresAt,\r\n-        input.Options,\r\n-        input.AllowRealtimeResults,\r\n-    )\r\n+    service := service.NewCreatePollService()\r\n+    result, err := service.CreatePoll(input.Title, input.Description, input.Options)\r\n     if err != nil {\r\n-        http.Error(w, err.Error(), http.StatusInternalServerError)\r\n+        http.Error(w, fmt.Sprintf(`{\"error\": \"%s\"}`, err.Error()), http.StatusInternalServerError)\r\n         return\r\n     }\r\n \r\n     w.Header().Set(\"Content-Type\", \"application/json\")\r\n     json.NewEncoder(w).Encode(map[string]interface{}{\r\n-        \"poll_id\": pollID,\r\n-        \"url\":     pollURL,\r\n+        \"poll_id\":     result.PollID,\r\n+        \"voting_url\":  result.VotingURL,\r\n+        \"dashboard_url\": result.DashboardURL,\r\n     })\r\n }\n\\ No newline at end of file\n"
+                },
+                {
+                    "date": 1747292500852,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -7,24 +7,35 @@\n     \"backand/services\"\r\n )\r\n \r\n func CreatePollHandler(w http.ResponseWriter, r *http.Request) {\r\n-    var input models.CreatePollRequest\r\n+    var input struct {\r\n+        Title                string   `json:\"title\"`\r\n+        Description          string   `json:\"description\"`\r\n+        Options              []string `json:\"options\"`\r\n+        ExpiresAt            string   `json:\"expires_at\"`\r\n+        AllowRealtimeResults bool     `json:\"allow_realtime_results\"`\r\n+    }\r\n+\r\n     if err := json.NewDecoder(r.Body).Decode(&input); err != nil {\r\n         http.Error(w, \"Invalid request payload\", http.StatusBadRequest)\r\n         return\r\n     }\r\n \r\n-    service := service.NewCreatePollService()\r\n-    result, err := service.CreatePoll(input.Title, input.Description, input.Options)\r\n+    pollID, pollURL, err := services.CreatePoll(\r\n+        input.Title,\r\n+        input.Description,\r\n+        input.ExpiresAt,\r\n+        input.Options,\r\n+        input.AllowRealtimeResults,\r\n+    )\r\n     if err != nil {\r\n-        http.Error(w, fmt.Sprintf(`{\"error\": \"%s\"}`, err.Error()), http.StatusInternalServerError)\r\n+        http.Error(w, err.Error(), http.StatusInternalServerError)\r\n         return\r\n     }\r\n \r\n     w.Header().Set(\"Content-Type\", \"application/json\")\r\n     json.NewEncoder(w).Encode(map[string]interface{}{\r\n-        \"poll_id\":     result.PollID,\r\n-        \"voting_url\":  result.VotingURL,\r\n-        \"dashboard_url\": result.DashboardURL,\r\n+        \"poll_id\": pollID,\r\n+        \"url\":     pollURL,\r\n     })\r\n }\n\\ No newline at end of file\n"
                 }
             ],
             "date": 1747213500217,

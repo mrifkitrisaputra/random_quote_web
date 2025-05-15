@@ -5,4 +5,5 @@ type PollDetails struct {
     Options           []PollOption `json:"options"`
     Results           []PollResult `json:"results,omitempty"`
     CanSeeResults     bool         `json:"can_see_results"`
+    VotingURL    string `json:"voting_url"`
 }

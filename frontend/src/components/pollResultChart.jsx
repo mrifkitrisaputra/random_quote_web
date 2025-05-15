@@ -2,28 +2,27 @@ import React from 'react';
 
 const PollResultChart = ({ results }) => {
     if (!results || results.length === 0) {
-        return <p className="text-gray-500">Belum ada suara.</p>;
+        return <p>Belum ada suara.</p>;
     }
 
-    const totalVotes = results.reduce((acc, res) => acc + res.total_votes, 0);
+    const totalVotes = results.reduce((sum, r) => sum + r.total_votes, 0);
 
     return (
-        <div className="mt-6">
-            <h3 className="font-semibold mb-2">Hasil Voting:</h3>
+        <div className="result-section mt-6">
+            <h2 className="text-lg font-semibold mb-4">Hasil Polling</h2>
             <ul>
-                {results.map((res, index) => (
-                    <li key={index} className="mb-3">
+                {results.map((res, i) => (
+                    <li key={i} className="mb-2">
                         <div className="flex justify-between mb-1">
                             <span>{res.option_text}</span>
                             <span>{res.total_votes} suara</span>
                         </div>
-                        <div className="w-full bg-gray-200 h-2 rounded">
+                        <div className="w-full bg-gray-200 h-2 rounded overflow-hidden">
                             <div
                                 style={{
-                                    width: `${totalVotes > 0 ? (res.total_votes / totalVotes) * 100 : 0}%`,
+                                    width: `${(res.total_votes / totalVotes) * 100 || 0}%`,
                                     backgroundColor: '#3b82f6',
-                                    height: '100%',
-                                    borderRadius: '999px'
+                                    height: '100%'
                                 }}
                             ></div>
                         </div>

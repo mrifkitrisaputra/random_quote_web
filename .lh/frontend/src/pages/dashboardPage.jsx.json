@@ -3,7 +3,7 @@
     "activeCommit": 0,
     "commits": [
         {
-            "activePatchIndex": 5,
+            "activePatchIndex": 7,
             "patches": [
                 {
                     "date": 1747278705546,
@@ -28,6 +28,14 @@
                 {
                     "date": 1747280815110,
                     "content": "Index: \n===================================================================\n--- \n+++ \n@@ -1,7 +1,7 @@\n import React, { useEffect, useState } from 'react';\r\n import PollCard from '../components/PollCard';\r\n-import { fetchDashboardPolls } from '../services/api';\r\n+import { fetchDashboardPolls } from '../service/api';\r\n \r\n const DashboardPage = () => {\r\n     const [polls, setPolls] = useState([]);\r\n \r\n"
+                },
+                {
+                    "date": 1747291645708,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -0,0 +1,43 @@\n+import React, { useEffect, useState } from 'react';\r\n+import { fetchDashboardPolls, closePoll, deletePoll } from '../services/api';\r\n+import PollCard from '../components/PollCard';\r\n+\r\n+const DashboardPage = () => {\r\n+    const [polls, setPolls] = useState([]);\r\n+\r\n+    useEffect(() => {\r\n+        const loadPolls = async () => {\r\n+            const data = await fetchDashboardPolls();\r\n+            setPolls(data || []);\r\n+        };\r\n+\r\n+        loadPolls();\r\n+    }, []);\r\n+\r\n+    const refresh = async () => {\r\n+        const data = await fetchDashboardPolls();\r\n+        setPolls(data || []);\r\n+    };\r\n+\r\n+    return (\r\n+        <div className=\"min-h-screen bg-gray-50 p-6\">\r\n+            <div className=\"max-w-4xl mx-auto bg-white p-6 rounded shadow-md\">\r\n+                <h1 className=\"text-2xl font-bold mb-6\">Dashboard Poll Creator</h1>\r\n+\r\n+                {polls.length === 0 ? (\r\n+                    <p>Belum ada polling</p>\r\n+                ) : (\r\n+                    polls.map(poll => (\r\n+                        <PollCard key={poll.id} poll={poll} onRefresh={refresh} />\r\n+                    ))\r\n+                )}\r\n+\r\n+                <a href=\"/create\" className=\"inline-block mt-4 bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700\">\r\n+                    Buat Polling Baru\r\n+                </a>\r\n+            </div>\r\n+        </div>\r\n+    );\r\n+};\r\n+\r\n+export default DashboardPage;\n\\ No newline at end of file\n"
+                },
+                {
+                    "date": 1747291661320,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -0,0 +1,43 @@\n+import React, { useEffect, useState } from 'react';\r\n+import { fetchDashboardPolls, closePoll, deletePoll } from '../services/api';\r\n+import PollCard from '../components/pollCard';\r\n+\r\n+const DashboardPage = () => {\r\n+    const [polls, setPolls] = useState([]);\r\n+\r\n+    useEffect(() => {\r\n+        const loadPolls = async () => {\r\n+            const data = await fetchDashboardPolls();\r\n+            setPolls(data || []);\r\n+        };\r\n+\r\n+        loadPolls();\r\n+    }, []);\r\n+\r\n+    const refresh = async () => {\r\n+        const data = await fetchDashboardPolls();\r\n+        setPolls(data || []);\r\n+    };\r\n+\r\n+    return (\r\n+        <div className=\"min-h-screen bg-gray-50 p-6\">\r\n+            <div className=\"max-w-4xl mx-auto bg-white p-6 rounded shadow-md\">\r\n+                <h1 className=\"text-2xl font-bold mb-6\">Dashboard Poll Creator</h1>\r\n+\r\n+                {polls.length === 0 ? (\r\n+                    <p>Belum ada polling</p>\r\n+                ) : (\r\n+                    polls.map(poll => (\r\n+                        <PollCard key={poll.id} poll={poll} onRefresh={refresh} />\r\n+                    ))\r\n+                )}\r\n+\r\n+                <a href=\"/create\" className=\"inline-block mt-4 bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700\">\r\n+                    Buat Polling Baru\r\n+                </a>\r\n+            </div>\r\n+        </div>\r\n+    );\r\n+};\r\n+\r\n+export default DashboardPage;\n\\ No newline at end of file\n"
                 }
             ],
             "date": 1747278705546,

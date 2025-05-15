@@ -2,79 +2,58 @@ import React, { useState } from 'react';
 import { toggleRealtimeVisibility, closePoll, deletePoll } from '../service/api';
 
 const PollCard = ({ poll, onRefresh }) => {
-    const [loading, setLoading] = useState(false);
+    const [allowRealtime, setAllowRealtime] = useState(poll.allow_realtime_results);
 
     const handleToggleVisibility = async () => {
-        setLoading(true);
-        try {
-            await toggleRealtimeVisibility(poll.id, !poll.allow_realtime_results);
-            onRefresh();
-        } catch (err) {
-            alert("Gagal mengubah izin realtime");
-        } finally {
-            setLoading(false);
-        }
+        const newVisibility = !allowRealtime;
+        await toggleRealtimeVisibility(poll.id, newVisibility);
+        setAllowRealtime(newVisibility);
+        onRefresh();
     };
 
-    const handleCloseOperation = async () => {
-        if (!window.confirm("Tutup polling ini?")) return;
-
-        setLoading(true);
-        try {
+    const handleClosePoll = async () => {
+        if (window.confirm("Tutup polling ini?")) {
             await closePoll(poll.id);
             onRefresh();
-        } catch (err) {
-            alert("Gagal menutup polling");
-        } finally {
-            setLoading(false);
         }
     };
 
-    const handleDelete = async () => {
-        if (!window.confirm("Hapus polling ini?")) return;
-
-        setLoading(true);
-        try {
+    const handleDeletePoll = async () => {
+        if (window.confirm("Hapus polling ini?")) {
             await deletePoll(poll.id);
             onRefresh();
-        } catch (err) {
-            alert("Gagal menghapus polling");
-        } finally {
-            setLoading(false);
         }
     };
 
     return (
-        <div className="border p-4 mb-4 rounded shadow-sm bg-white">
-            <h3 className="font-semibold">{poll.title}</h3>
+        <div className="border p-4 mb-4 bg-white rounded shadow-sm">
+            <h2 className="font-semibold">{poll.title}</h2>
             <p>{poll.description}</p>
             <p>Status: <strong>{poll.status}</strong></p>
             <p>Jumlah Suara: <strong>{poll.vote_count}</strong></p>
 
-            <label className="flex items-center mt-2">
+            <label className="flex items-center gap-2 mt-2">
                 <input
                     type="checkbox"
-                    checked={poll.allow_realtime_results || false}
+                    checked={allowRealtime}
                     onChange={handleToggleVisibility}
-                    disabled={poll.status === "closed"}
                 />
-                <span className="ml-2">Lihat hasil saat aktif</span>
+                <span>Izinkan lihat hasil saat aktif</span>
             </label>
 
             <div className="mt-4 flex gap-2">
                 <button
-                    onClick={handleCloseOperation}
-                    disabled={poll.status === "closed" || loading}
+                    onClick={handleClosePoll}
+                    disabled={poll.status === 'closed'}
                     className="bg-yellow-500 text-white px-3 py-1 rounded hover:bg-yellow-600"
                 >
-                    {poll.status === "closed" ? "Sudah Ditutup" : "Tutup"}
+                    {poll.status === 'closed' ? 'Polling Ditutup' : 'Tutup Polling'}
                 </button>
                 <button
-                    onClick={handleDelete}
-                    disabled={loading}
+                    onClick={handleDeletePoll}
                     className="bg-red-600 text-white px-3 py-1 rounded hover:bg-red-700"
                 >
-                    Hapus
+                    Hapus Polling
                 </button>
             </div>
         </div>

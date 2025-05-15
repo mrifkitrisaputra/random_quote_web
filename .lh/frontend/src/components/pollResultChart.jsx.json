@@ -3,11 +3,15 @@
     "activeCommit": 0,
     "commits": [
         {
-            "activePatchIndex": 0,
+            "activePatchIndex": 1,
             "patches": [
                 {
                     "date": 1747281096250,
                     "content": "Index: \n===================================================================\n--- \n+++ \n"
+                },
+                {
+                    "date": 1747291637500,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -0,0 +1,36 @@\n+import React from 'react';\r\n+\r\n+const PollResultChart = ({ results }) => {\r\n+    if (!results || results.length === 0) {\r\n+        return <p>Belum ada suara.</p>;\r\n+    }\r\n+\r\n+    const totalVotes = results.reduce((sum, r) => sum + r.total_votes, 0);\r\n+\r\n+    return (\r\n+        <div className=\"result-section mt-6\">\r\n+            <h2 className=\"text-lg font-semibold mb-4\">Hasil Polling</h2>\r\n+            <ul>\r\n+                {results.map((res, i) => (\r\n+                    <li key={i} className=\"mb-2\">\r\n+                        <div className=\"flex justify-between mb-1\">\r\n+                            <span>{res.option_text}</span>\r\n+                            <span>{res.total_votes} suara</span>\r\n+                        </div>\r\n+                        <div className=\"w-full bg-gray-200 h-2 rounded overflow-hidden\">\r\n+                            <div\r\n+                                style={{\r\n+                                    width: `${(res.total_votes / totalVotes) * 100 || 0}%`,\r\n+                                    backgroundColor: '#3b82f6',\r\n+                                    height: '100%'\r\n+                                }}\r\n+                            ></div>\r\n+                        </div>\r\n+                    </li>\r\n+                ))}\r\n+            </ul>\r\n+        </div>\r\n+    );\r\n+};\r\n+\r\n+export default PollResultChart;\n\\ No newline at end of file\n"
                 }
             ],
             "date": 1747281096250,

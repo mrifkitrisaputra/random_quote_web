@@ -1,34 +1,31 @@
 import React, { useEffect, useState } from 'react';
+import { fetchDashboardPolls, closePoll, deletePoll } from '../service/api';
 import PollCard from '../components/pollCard';
-import { fetchDashboardPolls } from '../service/api';
 
 const DashboardPage = () => {
     const [polls, setPolls] = useState([]);
 
     useEffect(() => {
         const loadPolls = async () => {
-            try {
-                const data = await fetchDashboardPolls();
-                setPolls(data);
-            } catch (err) {
-                alert("Gagal memuat polling");
-            }
+            const data = await fetchDashboardPolls();
+            setPolls(data || []);
         };
+
         loadPolls();
     }, []);
 
     const refresh = async () => {
         const data = await fetchDashboardPolls();
-        setPolls(data);
+        setPolls(data || []);
     };
 
     return (
         <div className="min-h-screen bg-gray-50 p-6">
-            <div className="max-w-4xl mx-auto bg-white shadow-md p-6 rounded">
+            <div className="max-w-4xl mx-auto bg-white p-6 rounded shadow-md">
                 <h1 className="text-2xl font-bold mb-6">Dashboard Poll Creator</h1>
 
                 {polls.length === 0 ? (
-                    <p>Belum ada polling. Silakan buat polling baru.</p>
+                    <p>Belum ada polling</p>
                 ) : (
                     polls.map(poll => (
                         <PollCard key={poll.id} poll={poll} onRefresh={refresh} />

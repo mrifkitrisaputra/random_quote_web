@@ -1,0 +1,22 @@
+{
+    "sourceFile": "backend/service/createPoll_service.go",
+    "activeCommit": 0,
+    "commits": [
+        {
+            "activePatchIndex": 1,
+            "patches": [
+                {
+                    "date": 1747292422253,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n"
+                },
+                {
+                    "date": 1747295796481,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -42,7 +42,7 @@\n \r\n return &models.PollDetails{\r\n     PollID:      pollID,\r\n     VotingURL:   fmt.Sprintf(\"http://localhost:5173/api/polls/%s/vote\", pollID),\r\n-\r\n+    DashboardURL: fmt.Sprintf(\"/polls/%s\", pollID), // Untuk creator akses detail\r\n }, nil\r\n }\n\\ No newline at end of file\n"
+                }
+            ],
+            "date": 1747292422253,
+            "name": "Commit-0",
+            "content": "package service\r\n\r\nimport (\r\n    \"backend/config\"\r\n    \"backend/models\"\r\n    \"fmt\"\r\n    \"time\"\r\n\r\n    \"github.com/google/uuid\"\r\n)\r\n\r\ntype CreatePollService struct{}\r\n\r\nfunc NewCreatePollService() *CreatePollService {\r\n    return &CreatePollService{}\r\n}\r\n\r\nfunc (s *CreatePollService) CreatePoll(title, description string, options []string) (*models.PollDetails, error) {\r\n    if len(title) == 0 || len(options) < 2 {\r\n        return nil, fmt.Errorf(\"judul dan minimal 2 opsi wajib diisi\")\r\n    }\r\n\r\n    pollID := uuid.New().String()\r\n    userID := uuid.New().String()\r\n    isOpen := true\r\n    createdAt := time.Now()\r\n\r\n    optionsJSON, err := models.SerializeOptions(options)\r\n    if err != nil {\r\n        return nil, fmt.Errorf(\"gagal memproses opsi\")\r\n    }\r\n\r\n    query := `\r\n        INSERT INTO polls (id, title, description, options, is_open, created_at, user_id)\r\n        VALUES (?, ?, ?, ?, ?, ?, ?)\r\n    `\r\n\r\n    _, err = config.DB.Exec(query, pollID, title, description, optionsJSON, isOpen, createdAt, userID)\r\n    if err != nil {\r\n        return nil, fmt.Errorf(\"gagal menyimpan poll: %v\", err)\r\n    }\r\n\r\nreturn &models.PollDetails{\r\n    PollID:      pollID,\r\n    VotingURL:   fmt.Sprintf(\"http://localhost:5173/api/polls/%s/vote\", pollID),\r\n    DashboardURL: fmt.Sprintf(\"/polls/%s\", pollID), // Untuk creator akses detail\r\n}, nil\r\n}"
+        }
+    ]
+}

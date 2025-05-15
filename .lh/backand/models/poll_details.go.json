@@ -3,7 +3,7 @@
     "activeCommit": 0,
     "commits": [
         {
-            "activePatchIndex": 1,
+            "activePatchIndex": 2,
             "patches": [
                 {
                     "date": 1747241112226,
@@ -12,6 +12,10 @@
                 {
                     "date": 1747241125009,
                     "content": "Index: \n===================================================================\n--- \n+++ \n@@ -1,1 +0,0 @@\n-package models type PollDetails struct { Poll Poll `json:\"poll\"` Options []PollOption `json:\"options\"` Results []PollResult `json:\"results,omitempty\"` CanSeeResults bool `json:\"can_see_results\"` }\n\\ No newline at end of file\n"
+                },
+                {
+                    "date": 1747292478639,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -0,0 +1,9 @@\n+package models\r\n+\r\n+type PollDetails struct {\r\n+    Poll              Poll         `json:\"poll\"`\r\n+    Options           []PollOption `json:\"options\"`\r\n+    Results           []PollResult `json:\"results,omitempty\"`\r\n+    CanSeeResults     bool         `json:\"can_see_results\"`\r\n+        VotingURL    string `json:\"voting_url\"`\r\n+}\n\\ No newline at end of file\n"
                 }
             ],
             "date": 1747241112226,
