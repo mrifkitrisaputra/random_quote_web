@@ -1,0 +1,22 @@
+{
+    "sourceFile": "backand/models/poll_details.go",
+    "activeCommit": 0,
+    "commits": [
+        {
+            "activePatchIndex": 1,
+            "patches": [
+                {
+                    "date": 1747241112226,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n"
+                },
+                {
+                    "date": 1747241125009,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -1,1 +0,0 @@\n-package models type PollDetails struct { Poll Poll `json:\"poll\"` Options []PollOption `json:\"options\"` Results []PollResult `json:\"results,omitempty\"` CanSeeResults bool `json:\"can_see_results\"` }\n\\ No newline at end of file\n"
+                }
+            ],
+            "date": 1747241112226,
+            "name": "Commit-0",
+            "content": "package models type PollDetails struct { Poll Poll `json:\"poll\"` Options []PollOption `json:\"options\"` Results []PollResult `json:\"results,omitempty\"` CanSeeResults bool `json:\"can_see_results\"` }"
+        }
+    ]
+}

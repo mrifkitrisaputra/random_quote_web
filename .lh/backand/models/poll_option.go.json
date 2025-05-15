@@ -1,0 +1,22 @@
+{
+    "sourceFile": "backand/models/poll_option.go",
+    "activeCommit": 0,
+    "commits": [
+        {
+            "activePatchIndex": 1,
+            "patches": [
+                {
+                    "date": 1747240649981,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n"
+                },
+                {
+                    "date": 1747240863973,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -1,7 +1,7 @@\n package models\r\n \r\n-type PollOptionn struct {\r\n+type PollOption struct {\r\n     ID    int    `json:\"id\"`\r\n     Text  string `json:\"text\"`\r\n     Order int    `json:\"order_index\"`\r\n }\n\\ No newline at end of file\n"
+                }
+            ],
+            "date": 1747240649981,
+            "name": "Commit-0",
+            "content": "package models\r\n\r\ntype PollOptionn struct {\r\n    ID    int    `json:\"id\"`\r\n    Text  string `json:\"text\"`\r\n    Order int    `json:\"order_index\"`\r\n}"
+        }
+    ]
+}

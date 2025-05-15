@@ -1,0 +1,22 @@
+{
+    "sourceFile": "frontend/src/assets/components/navbar.jsx",
+    "activeCommit": 0,
+    "commits": [
+        {
+            "activePatchIndex": 1,
+            "patches": [
+                {
+                    "date": 1747278987423,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n"
+                },
+                {
+                    "date": 1747279009768,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -10,25 +10,25 @@\n                     QuickPoll\r\n                 </Link>\r\n \r\n                 {/* Menu Navigasi */}\r\n-                ul className=\"flex space-x-6 items-center\">\r\n-                    <li>\r\n-                        <Link to=\"/\" className=\"hover:text-blue-200 transition-colors\">\r\n-                            Beranda\r\n-                        </Link>\r\n-                    </li>\r\n-                    <li>\r\n-                        <Link to=\"/create\" className=\"hover:text-blue-200 transition-colors\">\r\n-                            Buat Polling\r\n-                        </Link>\r\n-                    </li>\r\n-                    <li>\r\n-                        <Link to=\"/dashboard\" className=\"hover:text-blue-200 transition-colors\">\r\n-                            Dashboard\r\n-                        </Link>\r\n-                    </li>\r\n-                </ul>\r\n+                <ul className=\"flex space-x-6 items-center\">\r\n+  <li>\r\n+    <Link to=\"/\" className=\"hover:text-blue-200 transition-colors\">\r\n+      Beranda\r\n+    </Link>\r\n+  </li>\r\n+  <li>\r\n+    <Link to=\"/create\" className=\"hover:text-blue-200 transition-colors\">\r\n+      Buat Polling\r\n+    </Link>\r\n+  </li>\r\n+  <li>\r\n+    <Link to=\"/dashboard\" className=\"hover:text-blue-200 transition-colors\">\r\n+      Dashboard\r\n+    </Link>\r\n+  </li>\r\n+</ul>\r\n             </div>\r\n         </nav>\r\n     );\r\n };\r\n"
+                }
+            ],
+            "date": 1747278987423,
+            "name": "Commit-0",
+            "content": "import React from 'react';\r\nimport { Link } from 'react-router-dom';\r\n\r\nconst Navbar = () => {\r\n    return (\r\n        <nav className=\"bg-blue-600 text-white shadow-md\">\r\n            <div className=\"container mx-auto px-4 py-3 flex justify-between items-center\">\r\n                {/* Logo / Nama Aplikasi */}\r\n                <Link to=\"/\" className=\"text-xl font-bold hover:text-blue-200 transition-colors\">\r\n                    QuickPoll\r\n                </Link>\r\n\r\n                {/* Menu Navigasi */}\r\n                ul className=\"flex space-x-6 items-center\">\r\n                    <li>\r\n                        <Link to=\"/\" className=\"hover:text-blue-200 transition-colors\">\r\n                            Beranda\r\n                        </Link>\r\n                    </li>\r\n                    <li>\r\n                        <Link to=\"/create\" className=\"hover:text-blue-200 transition-colors\">\r\n                            Buat Polling\r\n                        </Link>\r\n                    </li>\r\n                    <li>\r\n                        <Link to=\"/dashboard\" className=\"hover:text-blue-200 transition-colors\">\r\n                            Dashboard\r\n                        </Link>\r\n                    </li>\r\n                </ul>\r\n            </div>\r\n        </nav>\r\n    );\r\n};\r\n\r\nexport default Navbar;"
+        }
+    ]
+}

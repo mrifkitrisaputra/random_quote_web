@@ -1,0 +1,38 @@
+{
+    "sourceFile": "frontend/src/pages/dashboardPage.jsx",
+    "activeCommit": 0,
+    "commits": [
+        {
+            "activePatchIndex": 5,
+            "patches": [
+                {
+                    "date": 1747278705546,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n"
+                },
+                {
+                    "date": 1747279201068,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -1,7 +1,7 @@\n import React, { useEffect, useState } from 'react';\r\n import axios from 'axios';\r\n-import PollCard from '../components/PollCard';\r\n+import PollCard from '../components/pollCard';\r\n \r\n const DashboardPage = () => {\r\n     const [polls, setPolls] = useState([]);\r\n \r\n"
+                },
+                {
+                    "date": 1747279207141,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -1,7 +1,7 @@\n import React, { useEffect, useState } from 'react';\r\n import axios from 'axios';\r\n-import PollCard from '../components/pollCard';\r\n+import PollCard from '../assets/components/pollCard';\r\n \r\n const DashboardPage = () => {\r\n     const [polls, setPolls] = useState([]);\r\n \r\n"
+                },
+                {
+                    "date": 1747279491064,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -1,7 +1,7 @@\n import React, { useEffect, useState } from 'react';\r\n import axios from 'axios';\r\n-import PollCard from '../assets/components/pollCard';\r\n+import PollCard from '../components/pollCard';\r\n \r\n const DashboardPage = () => {\r\n     const [polls, setPolls] = useState([]);\r\n \r\n"
+                },
+                {
+                    "date": 1747280673694,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -1,49 +1,44 @@\n import React, { useEffect, useState } from 'react';\r\n-import axios from 'axios';\r\n-import PollCard from '../components/pollCard';\r\n+import PollCard from '../components/PollCard';\r\n+import { fetchDashboardPolls } from '../services/api';\r\n \r\n const DashboardPage = () => {\r\n     const [polls, setPolls] = useState([]);\r\n \r\n     useEffect(() => {\r\n         const loadPolls = async () => {\r\n             try {\r\n-                const res = await axios.get('/api/dashboard');\r\n-                setPolls(res.data.polls || []);\r\n+                const data = await fetchDashboardPolls();\r\n+                setPolls(data);\r\n             } catch (err) {\r\n-                alert('Gagal memuat polling');\r\n-                console.error(err);\r\n+                alert(\"Gagal memuat polling\");\r\n             }\r\n         };\r\n         loadPolls();\r\n     }, []);\r\n \r\n-    const refreshPolls = async () => {\r\n-        const res = await axios.get('/api/dashboard');\r\n-        setPolls(res.data.polls || []);\r\n+    const refresh = async () => {\r\n+        const data = await fetchDashboardPolls();\r\n+        setPolls(data);\r\n     };\r\n \r\n     return (\r\n-        <div className=\"min-h-screen bg-gray-100 p-6\">\r\n-            <div className=\"max-w-4xl mx-auto bg-white shadow-md p-6 rounded-md\">\r\n-                <h1 className=\"text-2xl font-bold mb-6\">Dashboard</h1>\r\n+        <div className=\"min-h-screen bg-gray-50 p-6\">\r\n+            <div className=\"max-w-4xl mx-auto bg-white shadow-md p-6 rounded\">\r\n+                <h1 className=\"text-2xl font-bold mb-6\">Dashboard Poll Creator</h1>\r\n \r\n                 {polls.length === 0 ? (\r\n                     <p>Belum ada polling. Silakan buat polling baru.</p>\r\n                 ) : (\r\n-                    <div>\r\n-                        {polls.map(poll => (\r\n-                            <PollCard key={poll.id} poll={poll} onRefresh={refreshPolls} />\r\n-                        ))}\r\n-                    </div>\r\n+                    polls.map(poll => (\r\n+                        <PollCard key={poll.id} poll={poll} onRefresh={refresh} />\r\n+                    ))\r\n                 )}\r\n \r\n-                <div className=\"mt-6\">\r\n-                    <a href=\"/create\" className=\"bg-blue-600 text-white px-4 py-2 rounded\">\r\n-                        Buat Polling Baru\r\n-                    </a>\r\n-                </div>\r\n+                <a href=\"/create\" className=\"inline-block mt-4 bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700\">\r\n+                    Buat Polling Baru\r\n+                </a>\r\n             </div>\r\n         </div>\r\n     );\r\n };\r\n"
+                },
+                {
+                    "date": 1747280815110,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -1,7 +1,7 @@\n import React, { useEffect, useState } from 'react';\r\n import PollCard from '../components/PollCard';\r\n-import { fetchDashboardPolls } from '../services/api';\r\n+import { fetchDashboardPolls } from '../service/api';\r\n \r\n const DashboardPage = () => {\r\n     const [polls, setPolls] = useState([]);\r\n \r\n"
+                }
+            ],
+            "date": 1747278705546,
+            "name": "Commit-0",
+            "content": "import React, { useEffect, useState } from 'react';\r\nimport axios from 'axios';\r\nimport PollCard from '../components/PollCard';\r\n\r\nconst DashboardPage = () => {\r\n    const [polls, setPolls] = useState([]);\r\n\r\n    useEffect(() => {\r\n        const loadPolls = async () => {\r\n            try {\r\n                const res = await axios.get('/api/dashboard');\r\n                setPolls(res.data.polls || []);\r\n            } catch (err) {\r\n                alert('Gagal memuat polling');\r\n                console.error(err);\r\n            }\r\n        };\r\n        loadPolls();\r\n    }, []);\r\n\r\n    const refreshPolls = async () => {\r\n        const res = await axios.get('/api/dashboard');\r\n        setPolls(res.data.polls || []);\r\n    };\r\n\r\n    return (\r\n        <div className=\"min-h-screen bg-gray-100 p-6\">\r\n            <div className=\"max-w-4xl mx-auto bg-white shadow-md p-6 rounded-md\">\r\n                <h1 className=\"text-2xl font-bold mb-6\">Dashboard</h1>\r\n\r\n                {polls.length === 0 ? (\r\n                    <p>Belum ada polling. Silakan buat polling baru.</p>\r\n                ) : (\r\n                    <div>\r\n                        {polls.map(poll => (\r\n                            <PollCard key={poll.id} poll={poll} onRefresh={refreshPolls} />\r\n                        ))}\r\n                    </div>\r\n                )}\r\n\r\n                <div className=\"mt-6\">\r\n                    <a href=\"/create\" className=\"bg-blue-600 text-white px-4 py-2 rounded\">\r\n                        Buat Polling Baru\r\n                    </a>\r\n                </div>\r\n            </div>\r\n        </div>\r\n    );\r\n};\r\n\r\nexport default DashboardPage;"
+        }
+    ]
+}

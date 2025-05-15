@@ -1,0 +1,18 @@
+{
+    "sourceFile": "backand/migrations/1_create_polls.down.sql",
+    "activeCommit": 0,
+    "commits": [
+        {
+            "activePatchIndex": 0,
+            "patches": [
+                {
+                    "date": 1747212816852,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n"
+                }
+            ],
+            "date": 1747212816852,
+            "name": "Commit-0",
+            "content": "DROP TABLE IF EXISTS polls;"
+        }
+    ]
+}

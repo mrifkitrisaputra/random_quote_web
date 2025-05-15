@@ -1,0 +1,22 @@
+{
+    "sourceFile": "backand/migrations/2_create_poll_options.down.sql",
+    "activeCommit": 0,
+    "commits": [
+        {
+            "activePatchIndex": 1,
+            "patches": [
+                {
+                    "date": 1747212774728,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n"
+                },
+                {
+                    "date": 1747212833900,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -1,1 +1,1 @@\n-3_create_votes.up.sql\n\\ No newline at end of file\n+DROP TABLE IF EXISTS poll_options;\n\\ No newline at end of file\n"
+                }
+            ],
+            "date": 1747212774728,
+            "name": "Commit-0",
+            "content": "3_create_votes.up.sql"
+        }
+    ]
+}

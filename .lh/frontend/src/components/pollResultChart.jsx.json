@@ -1,0 +1,18 @@
+{
+    "sourceFile": "frontend/src/components/pollResultChart.jsx",
+    "activeCommit": 0,
+    "commits": [
+        {
+            "activePatchIndex": 0,
+            "patches": [
+                {
+                    "date": 1747281096250,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n"
+                }
+            ],
+            "date": 1747281096250,
+            "name": "Commit-0",
+            "content": "import React from 'react';\r\n\r\nconst PollResultChart = ({ results }) => {\r\n    if (!results || results.length === 0) {\r\n        return <p className=\"text-gray-500\">Belum ada suara.</p>;\r\n    }\r\n\r\n    const totalVotes = results.reduce((acc, res) => acc + res.total_votes, 0);\r\n\r\n    return (\r\n        <div className=\"mt-6\">\r\n            <h3 className=\"font-semibold mb-2\">Hasil Voting:</h3>\r\n            <ul>\r\n                {results.map((res, index) => (\r\n                    <li key={index} className=\"mb-3\">\r\n                        <div className=\"flex justify-between mb-1\">\r\n                            <span>{res.option_text}</span>\r\n                            <span>{res.total_votes} suara</span>\r\n                        </div>\r\n                        <div className=\"w-full bg-gray-200 h-2 rounded\">\r\n                            <div\r\n                                style={{\r\n                                    width: `${totalVotes > 0 ? (res.total_votes / totalVotes) * 100 : 0}%`,\r\n                                    backgroundColor: '#3b82f6',\r\n                                    height: '100%',\r\n                                    borderRadius: '999px'\r\n                                }}\r\n                            ></div>\r\n                        </div>\r\n                    </li>\r\n                ))}\r\n            </ul>\r\n        </div>\r\n    );\r\n};\r\n\r\nexport default PollResultChart;"
+        }
+    ]
+}

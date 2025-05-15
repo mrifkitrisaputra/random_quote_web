@@ -1,0 +1,1 @@
+go run testing.go createPollTest.go dashboardTest.go

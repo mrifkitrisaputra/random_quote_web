@@ -1,0 +1,18 @@
+{
+    "sourceFile": "backand/migrations/2_create_poll_options.up.sql",
+    "activeCommit": 0,
+    "commits": [
+        {
+            "activePatchIndex": 0,
+            "patches": [
+                {
+                    "date": 1747212824131,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n"
+                }
+            ],
+            "date": 1747212824131,
+            "name": "Commit-0",
+            "content": "CREATE TABLE IF NOT EXISTS poll_options (\r\n    id INT AUTO_INCREMENT PRIMARY KEY,\r\n    poll_id VARCHAR(32),\r\n    option_text VARCHAR(255) NOT NULL,\r\n    order_index INT NOT NULL,\r\n    FOREIGN KEY (poll_id) REFERENCES polls(id) ON DELETE CASCADE\r\n);"
+        }
+    ]
+}

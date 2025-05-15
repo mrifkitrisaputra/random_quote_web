@@ -1,0 +1,58 @@
+{
+    "sourceFile": "backand/handlers/export_handler.go",
+    "activeCommit": 0,
+    "commits": [
+        {
+            "activePatchIndex": 10,
+            "patches": [
+                {
+                    "date": 1747214458310,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n"
+                },
+                {
+                    "date": 1747236768249,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -4,9 +4,10 @@\n     \"encoding/json\"\r\n     \"net/http\"\r\n \r\n     \"github.com/gorilla/mux\"\r\n-    \"quickpoll/services\"\r\n+    \"backand/services\"\r\n+    \r\n )\r\n \r\n func ExportPollResults(w http.ResponseWriter, r *http.Request) {\r\n     vars := mux.Vars(r)\r\n"
+                },
+                {
+                    "date": 1747236778026,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -5,9 +5,9 @@\n     \"net/http\"\r\n \r\n     \"github.com/gorilla/mux\"\r\n     \"backand/services\"\r\n-    \r\n+    \"backand/models\"\r\n )\r\n \r\n func ExportPollResults(w http.ResponseWriter, r *http.Request) {\r\n     vars := mux.Vars(r)\r\n"
+                },
+                {
+                    "date": 1747236785123,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -5,9 +5,8 @@\n     \"net/http\"\r\n \r\n     \"github.com/gorilla/mux\"\r\n     \"backand/services\"\r\n-    \"backand/models\"\r\n )\r\n \r\n func ExportPollResults(w http.ResponseWriter, r *http.Request) {\r\n     vars := mux.Vars(r)\r\n"
+                },
+                {
+                    "date": 1747237132030,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -18,6 +18,6 @@\n         return\r\n     }\r\n \r\n     w.Header().Set(\"Content-Type\", \"application/json\")\r\n-    json.NewEncoder(w).Encode(results)\r\n+    json.NewEncoder(w).Encode(mapresults)\r\n }\n\\ No newline at end of file\n"
+                },
+                {
+                    "date": 1747237140971,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -18,6 +18,8 @@\n         return\r\n     }\r\n \r\n     w.Header().Set(\"Content-Type\", \"application/json\")\r\n-    json.NewEncoder(w).Encode(mapresults)\r\n+    json.NewEncoder(w).Encode(map[string]interface{}{\r\n+        \"result\"\r\n+    }results)\r\n }\n\\ No newline at end of file\n"
+                },
+                {
+                    "date": 1747237148290,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -19,7 +19,7 @@\n     }\r\n \r\n     w.Header().Set(\"Content-Type\", \"application/json\")\r\n     json.NewEncoder(w).Encode(map[string]interface{}{\r\n-        \"result\"\r\n+        \"results\": results\r\n     }results)\r\n }\n\\ No newline at end of file\n"
+                },
+                {
+                    "date": 1747237155766,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -19,7 +19,7 @@\n     }\r\n \r\n     w.Header().Set(\"Content-Type\", \"application/json\")\r\n     json.NewEncoder(w).Encode(map[string]interface{}{\r\n-        \"results\": results\r\n-    }results)\r\n+        \"results\": results,\r\n+    })\r\n }\n\\ No newline at end of file\n"
+                },
+                {
+                    "date": 1747237756547,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -18,8 +18,6 @@\n         return\r\n     }\r\n \r\n     w.Header().Set(\"Content-Type\", \"application/json\")\r\n-    json.NewEncoder(w).Encode(map[string]interface{}{\r\n-        \"results\": results,\r\n-    })\r\n+    json.NewEncoder(w).Encode(results)\r\n }\n\\ No newline at end of file\n"
+                },
+                {
+                    "date": 1747238011463,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -18,6 +18,8 @@\n         return\r\n     }\r\n \r\n     w.Header().Set(\"Content-Type\", \"application/json\")\r\n-    json.NewEncoder(w).Encode(results)\r\n+    json.NewEncoder(w).Encode(map[string]interface{}{\r\n+        \"results\": results,\r\n+    })\r\n }\n\\ No newline at end of file\n"
+                },
+                {
+                    "date": 1747238344992,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -18,8 +18,6 @@\n         return\r\n     }\r\n \r\n     w.Header().Set(\"Content-Type\", \"application/json\")\r\n-    json.NewEncoder(w).Encode(map[string]interface{}{\r\n-        \"results\": results,\r\n-    })\r\n+    json.NewEncoder(w).Encode(results)\r\n }\n\\ No newline at end of file\n"
+                }
+            ],
+            "date": 1747214458310,
+            "name": "Commit-0",
+            "content": "package handlers\r\n\r\nimport (\r\n    \"encoding/json\"\r\n    \"net/http\"\r\n\r\n    \"github.com/gorilla/mux\"\r\n    \"quickpoll/services\"\r\n)\r\n\r\nfunc ExportPollResults(w http.ResponseWriter, r *http.Request) {\r\n    vars := mux.Vars(r)\r\n    pollID := vars[\"id\"]\r\n\r\n    results, err := services.ExportPollResults(pollID)\r\n    if err != nil {\r\n        http.Error(w, err.Error(), http.StatusInternalServerError)\r\n        return\r\n    }\r\n\r\n    w.Header().Set(\"Content-Type\", \"application/json\")\r\n    json.NewEncoder(w).Encode(results)\r\n}"
+        }
+    ]
+}

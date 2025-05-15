@@ -1,0 +1,74 @@
+{
+    "sourceFile": "backand/handlers/admin_actions.go",
+    "activeCommit": 0,
+    "commits": [
+        {
+            "activePatchIndex": 14,
+            "patches": [
+                {
+                    "date": 1747214476005,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n"
+                },
+                {
+                    "date": 1747214504076,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -1,11 +1,12 @@\n package handlers\r\n \r\n import (\r\n     \"net/http\"\r\n+\t\r\n \r\n     \"github.com/gorilla/mux\"\r\n-    \"quickpoll/services\"\r\n+    \"backand/services\"\r\n )\r\n \r\n func ClosePoll(w http.ResponseWriter, r *http.Request) {\r\n     vars := mux.Vars(r)\r\n"
+                },
+                {
+                    "date": 1747214510093,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -0,0 +1,35 @@\n+package handlers\r\n+\r\n+import (\r\n+    \"net/http\"\r\n+\t\"encoding/json\"\r\n+\r\n+    \"github.com/gorilla/mux\"\r\n+    \"backand/services\"\r\n+)\r\n+\r\n+func ClosePoll(w http.ResponseWriter, r *http.Request) {\r\n+    vars := mux.Vars(r)\r\n+    pollID := vars[\"id\"]\r\n+\r\n+    if err := services.ClosePoll(pollID); err != nil {\r\n+        http.Error(w, err.Error(), http.StatusInternalServerError)\r\n+        return\r\n+    }\r\n+\r\n+    w.WriteHeader(http.StatusOK)\r\n+    json.NewEncoder(w).Encode(map[string]string{\"message\": \"Poll closed successfully\"})\r\n+}\r\n+\r\n+func DeletePoll(w http.ResponseWriter, r *http.Request) {\r\n+    vars := mux.Vars(r)\r\n+    pollID := vars[\"id\"]\r\n+\r\n+    if err := services.DeletePoll(pollID); err != nil {\r\n+        http.Error(w, err.Error(), http.StatusInternalServerError)\r\n+        return\r\n+    }\r\n+\r\n+    w.WriteHeader(http.StatusOK)\r\n+    json.NewEncoder(w).Encode(map[string]string{\"message\": \"Poll deleted successfully\"})\r\n+}\n\\ No newline at end of file\n"
+                },
+                {
+                    "date": 1747230877186,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -1,9 +1,9 @@\n package handlers\r\n \r\n import (\r\n+    \"encoding/json\"\r\n     \"net/http\"\r\n-\t\"encoding/json\"\r\n \r\n     \"github.com/gorilla/mux\"\r\n     \"backand/services\"\r\n )\r\n@@ -11,60 +11,39 @@\n func ClosePoll(w http.ResponseWriter, r *http.Request) {\r\n     vars := mux.Vars(r)\r\n     pollID := vars[\"id\"]\r\n \r\n-    if err := services.ClosePoll(pollID); err != nil {\r\n-        http.Error(w, err.Error(), http.StatusInternalServerError)\r\n+    err := services.ClosePoll(pollID)\r\n+    if err != nil {\r\n+        if err.Error() == \"poll not found\" {\r\n+            http.Error(w, `{\"error\": \"poll not found\"}`, http.StatusNotFound)\r\n+        } else {\r\n+            http.Error(w, `{\"error\": \"`+err.Error()+`\"}`, http.StatusInternalServerError)\r\n+        }\r\n         return\r\n     }\r\n \r\n     w.WriteHeader(http.StatusOK)\r\n-    json.NewEncoder(w).Encode(map[string]string{\"message\": \"Poll closed successfully\"})\r\n+    json.NewEncoder(w).Encode(map[string]string{\r\n+        \"message\": \"Poll closed successfully\",\r\n+    })\r\n }\r\n \r\n func DeletePoll(w http.ResponseWriter, r *http.Request) {\r\n     vars := mux.Vars(r)\r\n     pollID := vars[\"id\"]\r\n \r\n-    if err := services.DeletePoll(pollID); err != nil {\r\n-        http.Error(w, err.Error(), http.StatusInternalServerError)\r\n+    err := services.DeletePoll(pollID)\r\n+    if err != nil {\r\n+        if err.Error() == \"poll not found\" {\r\n+            http.Error(w, `{\"error\": \"poll not found\"}`, http.StatusNotFound)\r\n+        } else {\r\n+            http.Error(w, `{\"error\": \"`+err.Error()+`\"}`, http.StatusInternalServerError)\r\n+        }\r\n         return\r\n     }\r\n \r\n     w.WriteHeader(http.StatusOK)\r\n-    json.NewEncoder(w).Encode(map[string]string{\"message\": \"Poll deleted successfully\"})\r\n-}\n-package handlers\r\n-\r\n-import (\r\n-    \"net/http\"\r\n-\t\r\n-\r\n-    \"github.com/gorilla/mux\"\r\n-    \"backand/services\"\r\n-)\r\n-\r\n-func ClosePoll(w http.ResponseWriter, r *http.Request) {\r\n-    vars := mux.Vars(r)\r\n-    pollID := vars[\"id\"]\r\n-\r\n-    if err := services.ClosePoll(pollID); err != nil {\r\n-        http.Error(w, err.Error(), http.StatusInternalServerError)\r\n-        return\r\n-    }\r\n-\r\n-    w.WriteHeader(http.StatusOK)\r\n-    json.NewEncoder(w).Encode(map[string]string{\"message\": \"Poll closed successfully\"})\r\n-}\r\n-\r\n-func DeletePoll(w http.ResponseWriter, r *http.Request) {\r\n-    vars := mux.Vars(r)\r\n-    pollID := vars[\"id\"]\r\n-\r\n-    if err := services.DeletePoll(pollID); err != nil {\r\n-        http.Error(w, err.Error(), http.StatusInternalServerError)\r\n-        return\r\n-    }\r\n-\r\n-    w.WriteHeader(http.StatusOK)\r\n-    json.NewEncoder(w).Encode(map[string]string{\"message\": \"Poll deleted successfully\"})\r\n+    json.NewEncoder(w).Encode(map[string]string{\r\n+        \"message\": \"Poll deleted successfully\",\r\n+    })\r\n }\n\\ No newline at end of file\n"
+                },
+                {
+                    "date": 1747236644608,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -0,0 +1,35 @@\n+package handlers\r\n+\r\n+import (\r\n+    \"net/http\"\r\n+\t\"encoding/json\"\r\n+\r\n+    \"github.com/gorilla/mux\"\r\n+    \"backand/services\"\r\n+)\r\n+\r\n+func ClosePoll(w http.ResponseWriter, r *http.Request) {\r\n+    vars := mux.Vars(r)\r\n+    pollID := vars[\"id\"]\r\n+\r\n+    if err := services.ClosePoll(pollID); err != nil {\r\n+        http.Error(w, err.Error(), http.StatusInternalServerError)\r\n+        return\r\n+    }\r\n+\r\n+    w.WriteHeader(http.StatusOK)\r\n+    json.NewEncoder(w).Encode(map[string]string{\"message\": \"Poll closed successfully\"})\r\n+}\r\n+\r\n+func DeletePoll(w http.ResponseWriter, r *http.Request) {\r\n+    vars := mux.Vars(r)\r\n+    pollID := vars[\"id\"]\r\n+\r\n+    if err := services.DeletePoll(pollID); err != nil {\r\n+        http.Error(w, err.Error(), http.StatusInternalServerError)\r\n+        return\r\n+    }\r\n+\r\n+    w.WriteHeader(http.StatusOK)\r\n+    json.NewEncoder(w).Encode(map[string]string{\"message\": \"Poll deleted successfully\"})\r\n+}\n\\ No newline at end of file\n"
+                },
+                {
+                    "date": 1747237029717,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -25,8 +25,12 @@\n     w.WriteHeader(http.StatusOK)\r\n     json.NewEncoder(w).Encode(map[string]string{\r\n         \"message\": \"Poll closed successfully\",\r\n     })\r\n+\r\n+        json.NewEncoder(w).Encode(map[string]interface{}{\r\n+    \"message\": \"Vote successful\",\r\n+})\r\n }\r\n \r\n func DeletePoll(w http.ResponseWriter, r *http.Request) {\r\n     vars := mux.Vars(r)\r\n"
+                },
+                {
+                    "date": 1747237041958,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -1,42 +1,7 @@\n package handlers\r\n \r\n import (\r\n-    \"net/http\"\r\n-\t\"encoding/json\"\r\n-\r\n-    \"github.com/gorilla/mux\"\r\n-    \"backand/services\"\r\n-)\r\n-\r\n-func ClosePoll(w http.ResponseWriter, r *http.Request) {\r\n-    vars := mux.Vars(r)\r\n-    pollID := vars[\"id\"]\r\n-\r\n-    if err := services.ClosePoll(pollID); err != nil {\r\n-        http.Error(w, err.Error(), http.StatusInternalServerError)\r\n-        return\r\n-    }\r\n-\r\n-    w.WriteHeader(http.StatusOK)\r\n-    json.NewEncoder(w).Encode(map[string]string{\"message\": \"Poll closed successfully\"})\r\n-}\r\n-\r\n-func DeletePoll(w http.ResponseWriter, r *http.Request) {\r\n-    vars := mux.Vars(r)\r\n-    pollID := vars[\"id\"]\r\n-\r\n-    if err := services.DeletePoll(pollID); err != nil {\r\n-        http.Error(w, err.Error(), http.StatusInternalServerError)\r\n-        return\r\n-    }\r\n-\r\n-    w.WriteHeader(http.StatusOK)\r\n-    json.NewEncoder(w).Encode(map[string]string{\"message\": \"Poll deleted successfully\"})\r\n-}\n-package handlers\r\n-\r\n-import (\r\n     \"encoding/json\"\r\n     \"net/http\"\r\n \r\n     \"github.com/gorilla/mux\"\r\n@@ -57,9 +22,9 @@\n         return\r\n     }\r\n \r\n     w.WriteHeader(http.StatusOK)\r\n-    json.NewEncoder(w).Encode(map[string]string{\r\n+    json.NewEncoder(w).Encode(map[string]interface{\r\n         \"message\": \"Poll closed successfully\",\r\n     })\r\n \r\n         json.NewEncoder(w).Encode(map[string]interface{}{\r\n"
+                },
+                {
+                    "date": 1747237050264,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -22,9 +22,9 @@\n         return\r\n     }\r\n \r\n     w.WriteHeader(http.StatusOK)\r\n-    json.NewEncoder(w).Encode(map[string]interface{\r\n+    json.NewEncoder(w).Encode(map[string]interface{}{\r\n         \"message\": \"Poll closed successfully\",\r\n     })\r\n \r\n         json.NewEncoder(w).Encode(map[string]interface{}{\r\n"
+                },
+                {
+                    "date": 1747237058064,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -25,12 +25,8 @@\n     w.WriteHeader(http.StatusOK)\r\n     json.NewEncoder(w).Encode(map[string]interface{}{\r\n         \"message\": \"Poll closed successfully\",\r\n     })\r\n-\r\n-        json.NewEncoder(w).Encode(map[string]interface{}{\r\n-    \"message\": \"Vote successful\",\r\n-})\r\n }\r\n \r\n func DeletePoll(w http.ResponseWriter, r *http.Request) {\r\n     vars := mux.Vars(r)\r\n"
+                },
+                {
+                    "date": 1747237064724,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -42,8 +42,8 @@\n         return\r\n     }\r\n \r\n     w.WriteHeader(http.StatusOK)\r\n-    json.NewEncoder(w).Encode(map[string]string{\r\n+    json.NewEncoder(w).Encode(map[string]inter{\r\n         \"message\": \"Poll deleted successfully\",\r\n     })\r\n }\n\\ No newline at end of file\n"
+                },
+                {
+                    "date": 1747237740059,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -42,8 +42,8 @@\n         return\r\n     }\r\n \r\n     w.WriteHeader(http.StatusOK)\r\n-    json.NewEncoder(w).Encode(map[string]inter{\r\n+    json.NewEncoder(w).Encode(map[string]string{\r\n         \"message\": \"Poll deleted successfully\",\r\n     })\r\n }\n\\ No newline at end of file\n"
+                },
+                {
+                    "date": 1747238020001,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -42,8 +42,8 @@\n         return\r\n     }\r\n \r\n     w.WriteHeader(http.StatusOK)\r\n-    json.NewEncoder(w).Encode(map[string]string{\r\n+    json.NewEncoder(w).Encode(map[string]interface{}{\r\n         \"message\": \"Poll deleted successfully\",\r\n     })\r\n }\n\\ No newline at end of file\n"
+                },
+                {
+                    "date": 1747239068229,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -4,9 +4,9 @@\n     \"encoding/json\"\r\n     \"net/http\"\r\n \r\n     \"github.com/gorilla/mux\"\r\n-    \"backand/services\"\r\n+    \r\n )\r\n \r\n func ClosePoll(w http.ResponseWriter, r *http.Request) {\r\n     vars := mux.Vars(r)\r\n"
+                },
+                {
+                    "date": 1747239080369,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -4,9 +4,9 @@\n     \"encoding/json\"\r\n     \"net/http\"\r\n \r\n     \"github.com/gorilla/mux\"\r\n-    \r\n+    \"backand/models\"\r\n )\r\n \r\n func ClosePoll(w http.ResponseWriter, r *http.Request) {\r\n     vars := mux.Vars(r)\r\n"
+                },
+                {
+                    "date": 1747239087797,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -4,9 +4,9 @@\n     \"encoding/json\"\r\n     \"net/http\"\r\n \r\n     \"github.com/gorilla/mux\"\r\n-    \"backand/models\"\r\n+    \"backand/services\"\r\n )\r\n \r\n func ClosePoll(w http.ResponseWriter, r *http.Request) {\r\n     vars := mux.Vars(r)\r\n"
+                }
+            ],
+            "date": 1747214476005,
+            "name": "Commit-0",
+            "content": "package handlers\r\n\r\nimport (\r\n    \"net/http\"\r\n\r\n    \"github.com/gorilla/mux\"\r\n    \"quickpoll/services\"\r\n)\r\n\r\nfunc ClosePoll(w http.ResponseWriter, r *http.Request) {\r\n    vars := mux.Vars(r)\r\n    pollID := vars[\"id\"]\r\n\r\n    if err := services.ClosePoll(pollID); err != nil {\r\n        http.Error(w, err.Error(), http.StatusInternalServerError)\r\n        return\r\n    }\r\n\r\n    w.WriteHeader(http.StatusOK)\r\n    json.NewEncoder(w).Encode(map[string]string{\"message\": \"Poll closed successfully\"})\r\n}\r\n\r\nfunc DeletePoll(w http.ResponseWriter, r *http.Request) {\r\n    vars := mux.Vars(r)\r\n    pollID := vars[\"id\"]\r\n\r\n    if err := services.DeletePoll(pollID); err != nil {\r\n        http.Error(w, err.Error(), http.StatusInternalServerError)\r\n        return\r\n    }\r\n\r\n    w.WriteHeader(http.StatusOK)\r\n    json.NewEncoder(w).Encode(map[string]string{\"message\": \"Poll deleted successfully\"})\r\n}"
+        }
+    ]
+}

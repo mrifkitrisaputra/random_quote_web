@@ -1,0 +1,66 @@
+{
+    "sourceFile": "backand/handlers/dashboard_handler.go",
+    "activeCommit": 0,
+    "commits": [
+        {
+            "activePatchIndex": 12,
+            "patches": [
+                {
+                    "date": 1747213505028,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n"
+                },
+                {
+                    "date": 1747213794356,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -1,1 +1,33 @@\n-package handlers\n\\ No newline at end of file\n+package handlers\r\n+\r\n+import (\r\n+    \"encoding/json\"\r\n+    \"net/http\"\r\n+\r\n+    \"quickpoll/services\"\r\n+)\r\n+\r\n+func GetDashboardData(w http.ResponseWriter, r *http.Request) {\r\n+    polls, err := services.GetPollsForDashboard()\r\n+    if err != nil {\r\n+        http.Error(w, err.Error(), http.StatusInternalServerError)\r\n+        return\r\n+    }\r\n+\r\n+    w.Header().Set(\"Content-Type\", \"application/json\")\r\n+    json.NewEncoder(w).Encode(polls)\r\n+}\r\n+\r\n+func GetPollDetails(w http.ResponseWriter, r *http.Request) {\r\n+    vars := mux.Vars(r)\r\n+    pollID := vars[\"id\"]\r\n+\r\n+    poll, err := services.GetPollDetails(pollID)\r\n+    if err != nil {\r\n+        http.Error(w, err.Error(), http.StatusNotFound)\r\n+        return\r\n+    }\r\n+\r\n+    w.Header().Set(\"Content-Type\", \"application/json\")\r\n+    json.NewEncoder(w).Encode(poll)\r\n+}\n\\ No newline at end of file\n"
+                },
+                {
+                    "date": 1747213800166,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -3,9 +3,9 @@\n import (\r\n     \"encoding/json\"\r\n     \"net/http\"\r\n \r\n-    \"quickpoll/services\"\r\n+    \"backand/services\"\r\n )\r\n \r\n func GetDashboardData(w http.ResponseWriter, r *http.Request) {\r\n     polls, err := services.GetPollsForDashboard()\r\n"
+                },
+                {
+                    "date": 1747214189341,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -4,8 +4,9 @@\n     \"encoding/json\"\r\n     \"net/http\"\r\n \r\n     \"backand/services\"\r\n+\t\"github.com/gorilla/mux\"\r\n )\r\n \r\n func GetDashboardData(w http.ResponseWriter, r *http.Request) {\r\n     polls, err := services.GetPollsForDashboard()\r\n"
+                },
+                {
+                    "date": 1747236617529,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -4,9 +4,8 @@\n     \"encoding/json\"\r\n     \"net/http\"\r\n \r\n     \"backand/services\"\r\n-\t\"github.com/gorilla/mux\"\r\n )\r\n \r\n func GetDashboardData(w http.ResponseWriter, r *http.Request) {\r\n     polls, err := services.GetPollsForDashboard()\r\n"
+                },
+                {
+                    "date": 1747236625694,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -4,8 +4,9 @@\n     \"encoding/json\"\r\n     \"net/http\"\r\n \r\n     \"backand/services\"\r\n+\t\"github.com/gorilla/mux\"\r\n )\r\n \r\n func GetDashboardData(w http.ResponseWriter, r *http.Request) {\r\n     polls, err := services.GetPollsForDashboard()\r\n"
+                },
+                {
+                    "date": 1747237161747,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -15,9 +15,9 @@\n         return\r\n     }\r\n \r\n     w.Header().Set(\"Content-Type\", \"application/json\")\r\n-    json.NewEncoder(w).Encode(polls)\r\n+    json.NewEncoder(w).Encode(mapolls)\r\n }\r\n \r\n func GetPollDetails(w http.ResponseWriter, r *http.Request) {\r\n     vars := mux.Vars(r)\r\n"
+                },
+                {
+                    "date": 1747237168018,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -15,9 +15,11 @@\n         return\r\n     }\r\n \r\n     w.Header().Set(\"Content-Type\", \"application/json\")\r\n-    json.NewEncoder(w).Encode(mapolls)\r\n+    json.NewEncoder(w).Encode(map[string]interface{}{\r\n+        \"\"\r\n+    }polls)\r\n }\r\n \r\n func GetPollDetails(w http.ResponseWriter, r *http.Request) {\r\n     vars := mux.Vars(r)\r\n"
+                },
+                {
+                    "date": 1747237174556,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -16,9 +16,9 @@\n     }\r\n \r\n     w.Header().Set(\"Content-Type\", \"application/json\")\r\n     json.NewEncoder(w).Encode(map[string]interface{}{\r\n-        \"\"\r\n+        \"polls\": polls,\r\n     }polls)\r\n }\r\n \r\n func GetPollDetails(w http.ResponseWriter, r *http.Request) {\r\n"
+                },
+                {
+                    "date": 1747237182037,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -17,9 +17,9 @@\n \r\n     w.Header().Set(\"Content-Type\", \"application/json\")\r\n     json.NewEncoder(w).Encode(map[string]interface{}{\r\n         \"polls\": polls,\r\n-    }polls)\r\n+    })\r\n }\r\n \r\n func GetPollDetails(w http.ResponseWriter, r *http.Request) {\r\n     vars := mux.Vars(r)\r\n@@ -31,6 +31,6 @@\n         return\r\n     }\r\n \r\n     w.Header().Set(\"Content-Type\", \"application/json\")\r\n-    json.NewEncoder(w).Encode(poll)\r\n+    json.NewEncoder(w).Encode(map[string]interface{}{}poll)\r\n }\n\\ No newline at end of file\n"
+                },
+                {
+                    "date": 1747237189339,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -31,6 +31,8 @@\n         return\r\n     }\r\n \r\n     w.Header().Set(\"Content-Type\", \"application/json\")\r\n-    json.NewEncoder(w).Encode(map[string]interface{}{}poll)\r\n+    json.NewEncoder(w).Encode(map[string]interface{}{\r\n+        \"poll\"\r\n+    }poll)\r\n }\n\\ No newline at end of file\n"
+                },
+                {
+                    "date": 1747237195979,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -32,7 +32,7 @@\n     }\r\n \r\n     w.Header().Set(\"Content-Type\", \"application/json\")\r\n     json.NewEncoder(w).Encode(map[string]interface{}{\r\n-        \"poll\": \r\n+        \"poll\": poll,\r\n     }poll)\r\n }\n\\ No newline at end of file\n"
+                },
+                {
+                    "date": 1747284129100,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -0,0 +1,36 @@\n+package handlers\r\n+\r\n+import (\r\n+\t\"encoding/json\"\r\n+\t\"net/http\"\r\n+\r\n+\t\"backand/services\"\r\n+\t\"github.com/gorilla/mux\"\r\n+)\r\n+\r\n+func GetDashboardData(w http.ResponseWriter, r *http.Request) {\r\n+\tpolls, err := services.GetPollsForDashboard()\r\n+\tif err != nil {\r\n+\t\thttp.Error(w, err.Error(), http.StatusInternalServerError)\r\n+\t\treturn\r\n+\t}\r\n+\r\n+\tw.Header().Set(\"Content-Type\", \"application/json\")\r\n+\tjson.NewEncoder(w).Encode(map[string]interface{}{\r\n+\t\t\"polls\": polls,\r\n+\t})\r\n+}\r\n+\r\n+func GetPollDetails(w http.ResponseWriter, r *http.Request) {\r\n+\tvars := mux.Vars(r)\r\n+\tpollID := vars[\"id\"]\r\n+\r\n+\tpoll, err := services.GetPollDetails(pollID)\r\n+\tif err != nil {\r\n+\t\thttp.Error(w, err.Error(), http.StatusNotFound)\r\n+\t\treturn\r\n+\t}\r\n+\r\n+\tw.Header().Set(\"Content-Type\", \"application/json\")\r\n+\tjson.NewEncoder(w).Encode(poll)\r\n+}\r\n"
+                }
+            ],
+            "date": 1747213505028,
+            "name": "Commit-0",
+            "content": "package handlers"
+        }
+    ]
+}

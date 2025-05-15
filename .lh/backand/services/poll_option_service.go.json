@@ -1,0 +1,50 @@
+{
+    "sourceFile": "backand/services/poll_option_service.go",
+    "activeCommit": 0,
+    "commits": [
+        {
+            "activePatchIndex": 8,
+            "patches": [
+                {
+                    "date": 1747240180444,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n"
+                },
+                {
+                    "date": 1747240189831,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -1,8 +1,7 @@\n package services\r\n \r\n import (\r\n-    \"database/sql\"\r\n     \"fmt\"\r\n \r\n     \"backand/models\"\r\n )\r\n"
+                },
+                {
+                    "date": 1747240201729,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -3,8 +3,9 @@\n import (\r\n     \"fmt\"\r\n \r\n     \"backand/models\"\r\n+    \"backand/config\"\r\n )\r\n \r\n func FetchPollOptions(pollID string) ([]models.PollOption, error) {\r\n     rows, err := config.DB.Query(\"SELECT id, option_text, order_index FROM poll_options WHERE poll_id = ?\", pollID)\r\n"
+                },
+                {
+                    "date": 1747240571090,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -6,9 +6,9 @@\n     \"backand/models\"\r\n     \"backand/config\"\r\n )\r\n \r\n-func FetchPollOptions(pollID string) ([]models.PollOption, error) {\r\n+func FetchPollOptions(pollID string) ([]models.PollOptionn, error) {\r\n     rows, err := config.DB.Query(\"SELECT id, option_text, order_index FROM poll_options WHERE poll_id = ?\", pollID)\r\n     if err != nil {\r\n         return nil, err\r\n     }\r\n"
+                },
+                {
+                    "date": 1747240595461,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -2,10 +2,10 @@\n \r\n import (\r\n     \"fmt\"\r\n \r\n+    \"backand/config\"\r\n     \"backand/models\"\r\n-    \"backand/config\"\r\n )\r\n \r\n func FetchPollOptions(pollID string) ([]models.PollOptionn, error) {\r\n     rows, err := config.DB.Query(\"SELECT id, option_text, order_index FROM poll_options WHERE poll_id = ?\", pollID)\r\n@@ -13,11 +13,11 @@\n         return nil, err\r\n     }\r\n     defer rows.Close()\r\n \r\n-    var options []models.PollOption\r\n+    var options []models.PollOptionn\r\n     for rows.Next() {\r\n-        var o models.PollOption\r\n+        var o models.PollOptionn\r\n         if err := rows.Scan(&o.ID, &o.Text, &o.Order); err != nil {\r\n             return nil, fmt.Errorf(\"failed to scan poll options: %v\", err)\r\n         }\r\n         options = append(options, o)\r\n"
+                },
+                {
+                    "date": 1747240603711,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -3,9 +3,8 @@\n import (\r\n     \"fmt\"\r\n \r\n     \"backand/config\"\r\n-    \"backand/models\"\r\n )\r\n \r\n func FetchPollOptions(pollID string) ([]models.PollOptionn, error) {\r\n     rows, err := config.DB.Query(\"SELECT id, option_text, order_index FROM poll_options WHERE poll_id = ?\", pollID)\r\n"
+                },
+                {
+                    "date": 1747240610835,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -3,8 +3,9 @@\n import (\r\n     \"fmt\"\r\n \r\n     \"backand/config\"\r\n+\t\"backand/m\"\r\n )\r\n \r\n func FetchPollOptions(pollID string) ([]models.PollOptionn, error) {\r\n     rows, err := config.DB.Query(\"SELECT id, option_text, order_index FROM poll_options WHERE poll_id = ?\", pollID)\r\n"
+                },
+                {
+                    "date": 1747240850386,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -3,12 +3,12 @@\n import (\r\n     \"fmt\"\r\n \r\n     \"backand/config\"\r\n-\t\"backand/m\"\r\n+\t\"backand/models\"\r\n )\r\n \r\n-func FetchPollOptions(pollID string) ([]models.PollOptionn, error) {\r\n+func FetchPollOptions(pollID string) ([]models.PollOption, error) {\r\n     rows, err := config.DB.Query(\"SELECT id, option_text, order_index FROM poll_options WHERE poll_id = ?\", pollID)\r\n     if err != nil {\r\n         return nil, err\r\n     }\r\n"
+                },
+                {
+                    "date": 1747240872194,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -13,11 +13,11 @@\n         return nil, err\r\n     }\r\n     defer rows.Close()\r\n \r\n-    var options []models.PollOptionn\r\n+    var options []models.PollOption\r\n     for rows.Next() {\r\n-        var o models.PollOptionn\r\n+        var o models.PollOption\r\n         if err := rows.Scan(&o.ID, &o.Text, &o.Order); err != nil {\r\n             return nil, fmt.Errorf(\"failed to scan poll options: %v\", err)\r\n         }\r\n         options = append(options, o)\r\n"
+                }
+            ],
+            "date": 1747240180444,
+            "name": "Commit-0",
+            "content": "package services\r\n\r\nimport (\r\n    \"database/sql\"\r\n    \"fmt\"\r\n\r\n    \"backand/models\"\r\n)\r\n\r\nfunc FetchPollOptions(pollID string) ([]models.PollOption, error) {\r\n    rows, err := config.DB.Query(\"SELECT id, option_text, order_index FROM poll_options WHERE poll_id = ?\", pollID)\r\n    if err != nil {\r\n        return nil, err\r\n    }\r\n    defer rows.Close()\r\n\r\n    var options []models.PollOption\r\n    for rows.Next() {\r\n        var o models.PollOption\r\n        if err := rows.Scan(&o.ID, &o.Text, &o.Order); err != nil {\r\n            return nil, fmt.Errorf(\"failed to scan poll options: %v\", err)\r\n        }\r\n        options = append(options, o)\r\n    }\r\n\r\n    return options, nil\r\n}"
+        }
+    ]
+}

@@ -1,0 +1,18 @@
+{
+    "sourceFile": "backand/models/poll_result_model.go",
+    "activeCommit": 0,
+    "commits": [
+        {
+            "activePatchIndex": 0,
+            "patches": [
+                {
+                    "date": 1747238562123,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n"
+                }
+            ],
+            "date": 1747238562123,
+            "name": "Commit-0",
+            "content": "package models"
+        }
+    ]
+}

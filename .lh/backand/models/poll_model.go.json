@@ -1,0 +1,94 @@
+{
+    "sourceFile": "backand/models/poll_model.go",
+    "activeCommit": 0,
+    "commits": [
+        {
+            "activePatchIndex": 19,
+            "patches": [
+                {
+                    "date": 1747213513535,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n"
+                },
+                {
+                    "date": 1747214580542,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -1,1 +1,27 @@\n-pac\n\\ No newline at end of file\n+package models\r\n+\r\n+import \"time\"\r\n+\r\n+// Poll merepresentasikan struktur polling\r\n+type Poll struct {\r\n+    ID          string    `json:\"id\"`\r\n+    Title       string    `json:\"title\"`\r\n+    Description string    `json:\"description\"`\r\n+    CreatedAt   time.Time `json:\"created_at\"`\r\n+    ExpiresAt   time.Time `json:\"expires_at\"`\r\n+    Status      string    `json:\"status\"` // open / closed\r\n+}\r\n+\r\n+// PollOption adalah opsi dalam polling\r\n+type PollOption struct {\r\n+    ID        int    `json:\"id\"`\r\n+    PollID    string `json:\"poll_id\"`\r\n+    Text      string `json:\"text\"`\r\n+    Order     int    `json:\"order\"`\r\n+}\r\n+\r\n+// PollDetails adalah gabungan data polling + opsi\r\n+type PollDetails struct {\r\n+    Poll    Poll         `json:\"poll\"`\r\n+    Options []PollOption `json:\"options\"`\r\n+}\n\\ No newline at end of file\n"
+                },
+                {
+                    "date": 1747220305691,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -8,9 +8,10 @@\n     Title       string    `json:\"title\"`\r\n     Description string    `json:\"description\"`\r\n     CreatedAt   time.Time `json:\"created_at\"`\r\n     ExpiresAt   time.Time `json:\"expires_at\"`\r\n-    Status      string    `json:\"status\"` // open / closed\r\n+    Status      string    `json:\"status\"`\r\n+\tAllowRealtimeResults bool      `json:\"allow_realtime_results\"`\r\n }\r\n \r\n // PollOption adalah opsi dalam polling\r\n type PollOption struct {\r\n"
+                },
+                {
+                    "date": 1747234755199,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -3,26 +3,32 @@\n import \"time\"\r\n \r\n // Poll merepresentasikan struktur polling\r\n type Poll struct {\r\n-    ID          string    `json:\"id\"`\r\n-    Title       string    `json:\"title\"`\r\n-    Description string    `json:\"description\"`\r\n-    CreatedAt   time.Time `json:\"created_at\"`\r\n-    ExpiresAt   time.Time `json:\"expires_at\"`\r\n-    Status      string    `json:\"status\"`\r\n-\tAllowRealtimeResults bool      `json:\"allow_realtime_results\"`\r\n+    ID                   string    `json:\"id\"`\r\n+    Title                string    `json:\"title\"`\r\n+    Description          string    `json:\"description\"`\r\n+    CreatedAt            time.Time `json:\"created_at\"`\r\n+    ExpiresAt            time.Time `json:\"expires_at\"`\r\n+    Status               string    `json:\"status\"` // open / closed\r\n+    AllowRealtimeResults bool      `json:\"allow_realtime_results\"`\r\n }\r\n \r\n // PollOption adalah opsi dalam polling\r\n type PollOption struct {\r\n-    ID        int    `json:\"id\"`\r\n-    PollID    string `json:\"poll_id\"`\r\n-    Text      string `json:\"text\"`\r\n-    Order     int    `json:\"order\"`\r\n+    ID       int    `json:\"id\"`\r\n+    PollID   string `json:\"poll_id\"`\r\n+    Text     string `json:\"text\"`\r\n+    Order    int    `json:\"order_index\"`\r\n }\r\n \r\n // PollDetails adalah gabungan data polling + opsi\r\n type PollDetails struct {\r\n     Poll    Poll         `json:\"poll\"`\r\n     Options []PollOption `json:\"options\"`\r\n+}\r\n+\r\n+// PollResult adalah hasil voting per opsi\r\n+type PollResult struct {\r\n+    OptionText string `json:\"option_text\"`\r\n+    TotalVotes int    `json:\"total_votes\"`\r\n }\n\\ No newline at end of file\n"
+                },
+                {
+                    "date": 1747236041395,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -24,8 +24,9 @@\n // PollDetails adalah gabungan data polling + opsi\r\n type PollDetails struct {\r\n     Poll    Poll         `json:\"poll\"`\r\n     Options []PollOption `json:\"options\"`\r\n+\t\r\n }\r\n \r\n // PollResult adalah hasil voting per opsi\r\n type PollResult struct {\r\n"
+                },
+                {
+                    "date": 1747236076616,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -24,9 +24,9 @@\n // PollDetails adalah gabungan data polling + opsi\r\n type PollDetails struct {\r\n     Poll    Poll         `json:\"poll\"`\r\n     Options []PollOption `json:\"options\"`\r\n-\t\r\n+\tResults  []PollResult   `json:\"results,omitempty\"`\r\n }\r\n \r\n // PollResult adalah hasil voting per opsi\r\n type PollResult struct {\r\n"
+                },
+                {
+                    "date": 1747236271151,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -21,9 +21,9 @@\n     Order    int    `json:\"order_index\"`\r\n }\r\n \r\n // PollDetails adalah gabungan data polling + opsi\r\n-type PollDetails struct {\r\n+type PollDetail struct {\r\n     Poll    Poll         `json:\"poll\"`\r\n     Options []PollOption `json:\"options\"`\r\n \tResults  []PollResult   `json:\"results,omitempty\"`\r\n }\r\n"
+                },
+                {
+                    "date": 1747236393273,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -21,12 +21,12 @@\n     Order    int    `json:\"order_index\"`\r\n }\r\n \r\n // PollDetails adalah gabungan data polling + opsi\r\n-type PollDetail struct {\r\n-    Poll    Poll         `json:\"poll\"`\r\n-    Options []PollOption `json:\"options\"`\r\n-\tResults  []PollResult   `json:\"results,omitempty\"`\r\n+type PollDetails struct {\r\n+    Poll     Poll             `json:\"poll\"`\r\n+    Options  []PollOption   `json:\"options\"`\r\n+    Results  []PollResult   `json:\"results,omitempty\"` // tambahkan ini\r\n }\r\n \r\n // PollResult adalah hasil voting per opsi\r\n type PollResult struct {\r\n"
+                },
+                {
+                    "date": 1747236842149,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -25,11 +25,5 @@\n type PollDetails struct {\r\n     Poll     Poll             `json:\"poll\"`\r\n     Options  []PollOption   `json:\"options\"`\r\n     Results  []PollResult   `json:\"results,omitempty\"` // tambahkan ini\r\n-}\r\n-\r\n-// PollResult adalah hasil voting per opsi\r\n-type PollResult struct {\r\n-    OptionText string `json:\"option_text\"`\r\n-    TotalVotes int    `json:\"total_votes\"`\r\n }\n\\ No newline at end of file\n"
+                },
+                {
+                    "date": 1747236945439,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -25,5 +25,11 @@\n type PollDetails struct {\r\n     Poll     Poll             `json:\"poll\"`\r\n     Options  []PollOption   `json:\"options\"`\r\n     Results  []PollResult   `json:\"results,omitempty\"` // tambahkan ini\r\n+}\r\n+\r\n+// PollResult adalah hasil voting per opsi\r\n+type PollResult struct {\r\n+    OptionText string `json:\"option_text\"`\r\n+    TotalVotes int    `json:\"total_votes\"`\r\n }\n\\ No newline at end of file\n"
+                },
+                {
+                    "date": 1747238028192,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -27,9 +27,4 @@\n     Options  []PollOption   `json:\"options\"`\r\n     Results  []PollResult   `json:\"results,omitempty\"` // tambahkan ini\r\n }\r\n \r\n-// PollResult adalah hasil voting per opsi\r\n-type PollResult struct {\r\n-    OptionText string `json:\"option_text\"`\r\n-    TotalVotes int    `json:\"total_votes\"`\r\n-}\n\\ No newline at end of file\n"
+                },
+                {
+                    "date": 1747238033591,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -25,6 +25,5 @@\n type PollDetails struct {\r\n     Poll     Poll             `json:\"poll\"`\r\n     Options  []PollOption   `json:\"options\"`\r\n     Results  []PollResult   `json:\"results,omitempty\"` // tambahkan ini\r\n-}\r\n-\r\n+}\n\\ No newline at end of file\n"
+                },
+                {
+                    "date": 1747238038740,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -23,7 +23,6 @@\n \r\n // PollDetails adalah gabungan data polling + opsi\r\n type PollDetails struct {\r\n     Poll     Poll             `json:\"poll\"`\r\n-    Options  []PollOption   `json:\"options\"`\r\n-    Results  []PollResult   `json:\"results,omitempty\"` // tambahkan ini\r\n+    Options  []PollOption   `json:\"options\"`// tambahkan ini\r\n }\n\\ No newline at end of file\n"
+                },
+                {
+                    "date": 1747238230402,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -22,7 +22,7 @@\n }\r\n \r\n // PollDetails adalah gabungan data polling + opsi\r\n type PollDetails struct {\r\n-    Poll     Poll             `json:\"poll\"`\r\n-    Options  []PollOption   `json:\"options\"`// tambahkan ini\r\n+    Poll     Poll            `json:\"poll\"`\r\n+    Options  []PollOption   `json:\"options\"`\r\n }\n\\ No newline at end of file\n"
+                },
+                {
+                    "date": 1747238383464,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -22,7 +22,14 @@\n }\r\n \r\n // PollDetails adalah gabungan data polling + opsi\r\n type PollDetails struct {\r\n-    Poll     Poll            `json:\"poll\"`\r\n+    Poll     Poll             `json:\"poll\"`\r\n     Options  []PollOption   `json:\"options\"`\r\n+    Results  []PollResult   `json:\"results,omitempty\"` // tambahkan ini\r\n+}\r\n+\r\n+// PollResult adalah hasil voting per opsi\r\n+type PollResult struct {\r\n+    OptionText string `json:\"option_text\"`\r\n+    TotalVotes int    `json:\"total_votes\"`\r\n }\n\\ No newline at end of file\n"
+                },
+                {
+                    "date": 1747238835317,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -25,11 +25,5 @@\n type PollDetails struct {\r\n     Poll     Poll             `json:\"poll\"`\r\n     Options  []PollOption   `json:\"options\"`\r\n     Results  []PollResult   `json:\"results,omitempty\"` // tambahkan ini\r\n-}\r\n-\r\n-// PollResult adalah hasil voting per opsi\r\n-type PollResult struct {\r\n-    OptionText string `json:\"option_text\"`\r\n-    TotalVotes int    `json:\"total_votes\"`\r\n }\n\\ No newline at end of file\n"
+                },
+                {
+                    "date": 1747238962496,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -3,15 +3,15 @@\n import \"time\"\r\n \r\n // Poll merepresentasikan struktur polling\r\n type Poll struct {\r\n-    ID                   string    `json:\"id\"`\r\n-    Title                string    `json:\"title\"`\r\n-    Description          string    `json:\"description\"`\r\n+    ID                   string `json:\"id\"`\r\n+    Title                string `json:\"title\"`\r\n+    Description          string `json:\"description\"`\r\n     CreatedAt            time.Time `json:\"created_at\"`\r\n     ExpiresAt            time.Time `json:\"expires_at\"`\r\n-    Status               string    `json:\"status\"` // open / closed\r\n-    AllowRealtimeResults bool      `json:\"allow_realtime_results\"`\r\n+    Status               string `json:\"status\"`\r\n+    AllowRealtimeResults bool   `json:\"allow_realtime\"`\r\n }\r\n \r\n // PollOption adalah opsi dalam polling\r\n type PollOption struct {\r\n"
+                },
+                {
+                    "date": 1747240076288,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -2,16 +2,20 @@\n \r\n import \"time\"\r\n \r\n // Poll merepresentasikan struktur polling\r\n+package models\r\n+\r\n+import \"time\"\r\n+\r\n type Poll struct {\r\n-    ID                   string `json:\"id\"`\r\n-    Title                string `json:\"title\"`\r\n-    Description          string `json:\"description\"`\r\n+    ID                   string    `json:\"id\"`\r\n+    Title                string    `json:\"title\"`\r\n+    Description          string    `json:\"description\"`\r\n     CreatedAt            time.Time `json:\"created_at\"`\r\n     ExpiresAt            time.Time `json:\"expires_at\"`\r\n-    Status               string `json:\"status\"`\r\n-    AllowRealtimeResults bool   `json:\"allow_realtime\"`\r\n+    Status               string    `json:\"status\"` // open / closed\r\n+    AllowRealtimeResults bool      `json:\"allow_realtime\"`\r\n }\r\n \r\n // PollOption adalah opsi dalam polling\r\n type PollOption struct {\r\n"
+                },
+                {
+                    "date": 1747240088779,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -1,33 +1,9 @@\n-package models\r\n-\r\n-import \"time\"\r\n-\r\n-// Poll merepresentasikan struktur polling\r\n-package models\r\n-\r\n-import \"time\"\r\n-\r\n type Poll struct {\r\n     ID                   string    `json:\"id\"`\r\n     Title                string    `json:\"title\"`\r\n     Description          string    `json:\"description\"`\r\n     CreatedAt            time.Time `json:\"created_at\"`\r\n     ExpiresAt            time.Time `json:\"expires_at\"`\r\n     Status               string    `json:\"status\"` // open / closed\r\n     AllowRealtimeResults bool      `json:\"allow_realtime\"`\r\n-}\r\n-\r\n-// PollOption adalah opsi dalam polling\r\n-type PollOption struct {\r\n-    ID       int    `json:\"id\"`\r\n-    PollID   string `json:\"poll_id\"`\r\n-    Text     string `json:\"text\"`\r\n-    Order    int    `json:\"order_index\"`\r\n-}\r\n-\r\n-// PollDetails adalah gabungan data polling + opsi\r\n-type PollDetails struct {\r\n-    Poll     Poll             `json:\"poll\"`\r\n-    Options  []PollOption   `json:\"options\"`\r\n-    Results  []PollResult   `json:\"results,omitempty\"` // tambahkan ini\r\n }\n\\ No newline at end of file\n"
+                },
+                {
+                    "date": 1747240095628,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -1,4 +1,8 @@\n+package models\r\n+\r\n+import \"time\"\r\n+\r\n type Poll struct {\r\n     ID                   string    `json:\"id\"`\r\n     Title                string    `json:\"title\"`\r\n     Description          string    `json:\"description\"`\r\n"
+                }
+            ],
+            "date": 1747213513535,
+            "name": "Commit-0",
+            "content": "pac"
+        }
+    ]
+}

@@ -1,0 +1,82 @@
+{
+    "sourceFile": "backand/services/stats_service.go",
+    "activeCommit": 0,
+    "commits": [
+        {
+            "activePatchIndex": 16,
+            "patches": [
+                {
+                    "date": 1747214050884,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n"
+                },
+                {
+                    "date": 1747214057229,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -3,9 +3,9 @@\n import (\r\n     \"database/sql\"\r\n     \"fmt\"\r\n \r\n-    \"quickpoll/config\"\r\n+    \"backand/config\"\r\n )\r\n \r\n type PollResult struct {\r\n     OptionText string `json:\"option_text\"`\r\n"
+                },
+                {
+                    "date": 1747214146163,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -1,8 +1,7 @@\n package services\r\n \r\n import (\r\n-    \"database/sql\"\r\n     \"fmt\"\r\n \r\n     \"backand/config\"\r\n )\r\n"
+                },
+                {
+                    "date": 1747214152103,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -1,9 +1,9 @@\n package services\r\n \r\n import (\r\n-    \"fmt\"\r\n \r\n+\r\n     \"backand/config\"\r\n )\r\n \r\n type PollResult struct {\r\n"
+                },
+                {
+                    "date": 1747232967695,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -0,0 +1,35 @@\n+package services\r\n+\r\n+import (\r\n+    \"backand/config\"\r\n+)\r\n+\r\n+type PollResults struct {\r\n+    OptionText string `json:\"option_text\"`\r\n+    TotalVotes int    `json:\"total_votes\"`\r\n+}\r\n+\r\n+func ExportPollResults(pollID string) ([]PollResult, error) {\r\n+    rows, err := config.DB.Query(`\r\n+        SELECT po.option_text, COUNT(v.id) AS total_votes\r\n+        FROM poll_options po\r\n+        LEFT JOIN votes v ON po.id = v.option_id\r\n+        WHERE po.poll_id = ?\r\n+        GROUP BY po.id`, pollID)\r\n+\r\n+    if err != nil {\r\n+        return nil, err\r\n+    }\r\n+    defer rows.Close()\r\n+\r\n+    var results []PollResult\r\n+    for rows.Next() {\r\n+        var res PollResult\r\n+        if err := rows.Scan(&res.OptionText, &res.TotalVotes); err != nil {\r\n+            return nil, err\r\n+        }\r\n+        results = append(results, res)\r\n+    }\r\n+\r\n+    return results, nil\r\n+}\n\\ No newline at end of file\n"
+                },
+                {
+                    "date": 1747233002895,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -0,0 +1,35 @@\n+package services\r\n+\r\n+import (\r\n+    \"backand/config\"\r\n+)\r\n+\r\n+type PollResults struct {\r\n+    OptionText string `json:\"option_text\"`\r\n+    TotalVotes int    `json:\"total_votes\"`\r\n+}\r\n+\r\n+func ExportPollResults(pollID string) ([]PollResult, error) {\r\n+    rows, err := config.DB.Query(`\r\n+        SELECT po.option_text, COUNT(v.id) AS total_votes\r\n+        FROM poll_options po\r\n+        LEFT JOIN votes v ON po.id = v.option_id\r\n+        WHERE po.poll_id = ?\r\n+        GROUP BY po.id`, pollID)\r\n+\r\n+    if err != nil {\r\n+        return nil, err\r\n+    }\r\n+    defer rows.Close()\r\n+\r\n+    var results []PollResult\r\n+    for rows.Next() {\r\n+        var res PollResult\r\n+        if err := rows.Scan(&res.OptionText, &res.TotalVotes); err != nil {\r\n+            return nil, err\r\n+        }\r\n+        results = append(results, res)\r\n+    }\r\n+\r\n+    return results, nil\r\n+}\n\\ No newline at end of file\n"
+                },
+                {
+                    "date": 1747233033148,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -31,77 +31,5 @@\n         results = append(results, res)\r\n     }\r\n \r\n     return results, nil\r\n-}\n-package services\r\n-\r\n-import (\r\n-    \"backand/config\"\r\n-)\r\n-\r\n-type PollResults struct {\r\n-    OptionText string `json:\"option_text\"`\r\n-    TotalVotes int    `json:\"total_votes\"`\r\n-}\r\n-\r\n-func ExportPollResults(pollID string) ([]PollResult, error) {\r\n-    rows, err := config.DB.Query(`\r\n-        SELECT po.option_text, COUNT(v.id) AS total_votes\r\n-        FROM poll_options po\r\n-        LEFT JOIN votes v ON po.id = v.option_id\r\n-        WHERE po.poll_id = ?\r\n-        GROUP BY po.id`, pollID)\r\n-\r\n-    if err != nil {\r\n-        return nil, err\r\n-    }\r\n-    defer rows.Close()\r\n-\r\n-    var results []PollResult\r\n-    for rows.Next() {\r\n-        var res PollResult\r\n-        if err := rows.Scan(&res.OptionText, &res.TotalVotes); err != nil {\r\n-            return nil, err\r\n-        }\r\n-        results = append(results, res)\r\n-    }\r\n-\r\n-    return results, nil\r\n-}\n-package services\r\n-\r\n-import (\r\n-\r\n-\r\n-    \"backand/config\"\r\n-)\r\n-\r\n-type PollResult struct {\r\n-    OptionText string `json:\"option_text\"`\r\n-    TotalVotes int    `json:\"total_votes\"`\r\n-}\r\n-\r\n-func ExportPollResults(pollID string) ([]PollResult, error) {\r\n-    rows, err := config.DB.Query(`\r\n-        SELECT po.option_text, COUNT(v.id) AS total_votes\r\n-        FROM poll_options po\r\n-        LEFT JOIN votes v ON po.id = v.option_id\r\n-        WHERE po.poll_id = ?\r\n-        GROUP BY po.id`, pollID)\r\n-\r\n-    if err != nil {\r\n-        return nil, err\r\n-    }\r\n-    defer rows.Close()\r\n-\r\n-    var results []PollResult\r\n-    for rows.Next() {\r\n-        var res PollResult\r\n-        if err := rows.Scan(&res.OptionText, &res.TotalVotes); err != nil {\r\n-            return nil, err\r\n-        }\r\n-        results = append(results, res)\r\n-    }\r\n-\r\n-    return results, nil\r\n }\n\\ No newline at end of file\n"
+                },
+                {
+                    "date": 1747234199040,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -1,15 +1,4 @@\n-package services\r\n-\r\n-import (\r\n-    \"backand/config\"\r\n-)\r\n-\r\n-type PollResults struct {\r\n-    OptionText string `json:\"option_text\"`\r\n-    TotalVotes int    `json:\"total_votes\"`\r\n-}\r\n-\r\n func ExportPollResults(pollID string) ([]PollResult, error) {\r\n     rows, err := config.DB.Query(`\r\n         SELECT po.option_text, COUNT(v.id) AS total_votes\r\n         FROM poll_options po\r\n"
+                },
+                {
+                    "date": 1747234207534,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -1,4 +1,15 @@\n+package services\r\n+\r\n+import (\r\n+    \"backand/config\"\r\n+)\r\n+\r\n+type PollResults struct {\r\n+    OptionText string `json:\"option_text\"`\r\n+    TotalVotes int    `json:\"total_votes\"`\r\n+}\r\n+\r\n func ExportPollResults(pollID string) ([]PollResult, error) {\r\n     rows, err := config.DB.Query(`\r\n         SELECT po.option_text, COUNT(v.id) AS total_votes\r\n         FROM poll_options po\r\n"
+                },
+                {
+                    "date": 1747235753646,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -1,16 +1,12 @@\n package services\r\n \r\n import (\r\n     \"backand/config\"\r\n+    \"backand/models\"\r\n )\r\n \r\n-type PollResults struct {\r\n-    OptionText string `json:\"option_text\"`\r\n-    TotalVotes int    `json:\"total_votes\"`\r\n-}\r\n-\r\n-func ExportPollResults(pollID string) ([]PollResult, error) {\r\n+func ExportPollResults(pollID string) ([]models.PollResult, error) {\r\n     rows, err := config.DB.Query(`\r\n         SELECT po.option_text, COUNT(v.id) AS total_votes\r\n         FROM poll_options po\r\n         LEFT JOIN votes v ON po.id = v.option_id\r\n@@ -21,11 +17,11 @@\n         return nil, err\r\n     }\r\n     defer rows.Close()\r\n \r\n-    var results []PollResult\r\n+    var results []models.PollResult\r\n     for rows.Next() {\r\n-        var res PollResult\r\n+        var res models.PollResult\r\n         if err := rows.Scan(&res.OptionText, &res.TotalVotes); err != nil {\r\n             return nil, err\r\n         }\r\n         results = append(results, res)\r\n"
+                },
+                {
+                    "date": 1747236349981,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -4,9 +4,9 @@\n     \"backand/config\"\r\n     \"backand/models\"\r\n )\r\n \r\n-func ExportPollResults(pollID string) ([]models.PollResult, error) {\r\n+func ExportPollResults(pollID string) ([]PollResult, error) {\r\n     rows, err := config.DB.Query(`\r\n         SELECT po.option_text, COUNT(v.id) AS total_votes\r\n         FROM poll_options po\r\n         LEFT JOIN votes v ON po.id = v.option_id\r\n@@ -17,11 +17,11 @@\n         return nil, err\r\n     }\r\n     defer rows.Close()\r\n \r\n-    var results []models.PollResult\r\n+    var results []PollResult\r\n     for rows.Next() {\r\n-        var res models.PollResult\r\n+        var res PollResult\r\n         if err := rows.Scan(&res.OptionText, &res.TotalVotes); err != nil {\r\n             return nil, err\r\n         }\r\n         results = append(results, res)\r\n"
+                },
+                {
+                    "date": 1747236661883,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -4,9 +4,9 @@\n     \"backand/config\"\r\n     \"backand/models\"\r\n )\r\n \r\n-func ExportPollResults(pollID string) ([]PollResult, error) {\r\n+func ExportPollResults(pollID string) ([]models.PollResult, error) {\r\n     rows, err := config.DB.Query(`\r\n         SELECT po.option_text, COUNT(v.id) AS total_votes\r\n         FROM poll_options po\r\n         LEFT JOIN votes v ON po.id = v.option_id\r\n@@ -17,11 +17,11 @@\n         return nil, err\r\n     }\r\n     defer rows.Close()\r\n \r\n-    var results []PollResult\r\n+    var results []models.PollResult\r\n     for rows.Next() {\r\n-        var res PollResult\r\n+        var res models.PollResult\r\n         if err := rows.Scan(&res.OptionText, &res.TotalVotes); err != nil {\r\n             return nil, err\r\n         }\r\n         results = append(results, res)\r\n"
+                },
+                {
+                    "date": 1747236669885,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -1,12 +1,16 @@\n package services\r\n \r\n import (\r\n     \"backand/config\"\r\n-    \"backand/models\"\r\n )\r\n \r\n-func ExportPollResults(pollID string) ([]models.PollResult, error) {\r\n+type PollResults struct {\r\n+    OptionText string `json:\"option_text\"`\r\n+    TotalVotes int    `json:\"total_votes\"`\r\n+}\r\n+\r\n+func ExportPollResults(pollID string) ([]PollResult, error) {\r\n     rows, err := config.DB.Query(`\r\n         SELECT po.option_text, COUNT(v.id) AS total_votes\r\n         FROM poll_options po\r\n         LEFT JOIN votes v ON po.id = v.option_id\r\n@@ -17,11 +21,11 @@\n         return nil, err\r\n     }\r\n     defer rows.Close()\r\n \r\n-    var results []models.PollResult\r\n+    var results []PollResult\r\n     for rows.Next() {\r\n-        var res models.PollResult\r\n+        var res PollResult\r\n         if err := rows.Scan(&res.OptionText, &res.TotalVotes); err != nil {\r\n             return nil, err\r\n         }\r\n         results = append(results, res)\r\n"
+                },
+                {
+                    "date": 1747237920066,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -3,9 +3,9 @@\n import (\r\n     \"backand/config\"\r\n )\r\n \r\n-type PollResults struct {\r\n+type PollResult struct {\r\n     OptionText string `json:\"option_text\"`\r\n     TotalVotes int    `json:\"total_votes\"`\r\n }\r\n \r\n@@ -31,5 +31,6 @@\n         results = append(results, res)\r\n     }\r\n \r\n     return results, nil\r\n-}\n\\ No newline at end of file\n+}\r\n+\r\n"
+                },
+                {
+                    "date": 1747238403607,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -1,16 +1,12 @@\n package services\r\n \r\n import (\r\n     \"backand/config\"\r\n+    \"backand/models\"\r\n )\r\n \r\n-type PollResult struct {\r\n-    OptionText string `json:\"option_text\"`\r\n-    TotalVotes int    `json:\"total_votes\"`\r\n-}\r\n-\r\n-func ExportPollResults(pollID string) ([]PollResult, error) {\r\n+func ExportPollResults(pollID string) ([]models.PollResult, error) {\r\n     rows, err := config.DB.Query(`\r\n         SELECT po.option_text, COUNT(v.id) AS total_votes\r\n         FROM poll_options po\r\n         LEFT JOIN votes v ON po.id = v.option_id\r\n@@ -21,16 +17,15 @@\n         return nil, err\r\n     }\r\n     defer rows.Close()\r\n \r\n-    var results []PollResult\r\n+    var results []models.PollResult\r\n     for rows.Next() {\r\n-        var res PollResult\r\n+        var res models.PollResult\r\n         if err := rows.Scan(&res.OptionText, &res.TotalVotes); err != nil {\r\n             return nil, err\r\n         }\r\n         results = append(results, res)\r\n     }\r\n \r\n     return results, nil\r\n-}\r\n-\r\n+}\n\\ No newline at end of file\n"
+                },
+                {
+                    "date": 1747240222416,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -1,8 +1,7 @@\n package services\r\n \r\n import (\r\n-    \"backand/config\"\r\n     \"backand/models\"\r\n )\r\n \r\n func ExportPollResults(pollID string) ([]models.PollResult, error) {\r\n"
+                },
+                {
+                    "date": 1747240238228,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -0,0 +1,31 @@\n+package services\r\n+\r\n+import (\r\n+    \"backand/models\"\r\n+    \"backand/config\"\r\n+)\r\n+\r\n+func ExportPollResults(pollID string) ([]models.PollResult, error) {\r\n+    rows, err := config.DB.Query(`\r\n+        SELECT po.option_text, COUNT(v.id) AS total_votes\r\n+        FROM poll_options po\r\n+        LEFT JOIN votes v ON po.id = v.option_id\r\n+        WHERE po.poll_id = ?\r\n+        GROUP BY po.id`, pollID)\r\n+\r\n+    if err != nil {\r\n+        return nil, err\r\n+    }\r\n+    defer rows.Close()\r\n+\r\n+    var results []models.PollResult\r\n+    for rows.Next() {\r\n+        var res models.PollResult\r\n+        if err := rows.Scan(&res.OptionText, &res.TotalVotes); err != nil {\r\n+            return nil, err\r\n+        }\r\n+        results = append(results, res)\r\n+    }\r\n+\r\n+    return results, nil\r\n+}\n\\ No newline at end of file\n"
+                }
+            ],
+            "date": 1747214050884,
+            "name": "Commit-0",
+            "content": "package services\r\n\r\nimport (\r\n    \"database/sql\"\r\n    \"fmt\"\r\n\r\n    \"quickpoll/config\"\r\n)\r\n\r\ntype PollResult struct {\r\n    OptionText string `json:\"option_text\"`\r\n    TotalVotes int    `json:\"total_votes\"`\r\n}\r\n\r\nfunc ExportPollResults(pollID string) ([]PollResult, error) {\r\n    rows, err := config.DB.Query(`\r\n        SELECT po.option_text, COUNT(v.id) AS total_votes\r\n        FROM poll_options po\r\n        LEFT JOIN votes v ON po.id = v.option_id\r\n        WHERE po.poll_id = ?\r\n        GROUP BY po.id`, pollID)\r\n\r\n    if err != nil {\r\n        return nil, err\r\n    }\r\n    defer rows.Close()\r\n\r\n    var results []PollResult\r\n    for rows.Next() {\r\n        var res PollResult\r\n        if err := rows.Scan(&res.OptionText, &res.TotalVotes); err != nil {\r\n            return nil, err\r\n        }\r\n        results = append(results, res)\r\n    }\r\n\r\n    return results, nil\r\n}"
+        }
+    ]
+}

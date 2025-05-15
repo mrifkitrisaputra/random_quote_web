@@ -1,0 +1,46 @@
+{
+    "sourceFile": "backand/handlers/userpoll_handler.go",
+    "activeCommit": 0,
+    "commits": [
+        {
+            "activePatchIndex": 7,
+            "patches": [
+                {
+                    "date": 1747213507350,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n"
+                },
+                {
+                    "date": 1747213854785,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -1,1 +1,23 @@\n-package handlers\n\\ No newline at end of file\n+package handlerspackage handlers\r\n+\r\n+import (\r\n+    \"encoding/json\"\r\n+    \"net/http\"\r\n+\r\n+    \"github.com/gorilla/mux\"\r\n+    \"quickpoll/services\"\r\n+)\r\n+\r\n+func ViewPollPage(w http.ResponseWriter, r *http.Request) {\r\n+    vars := mux.Vars(r)\r\n+    pollID := vars[\"id\"]\r\n+\r\n+    pollData, err := services.FetchPollData(pollID)\r\n+    if err != nil {\r\n+        http.Error(w, err.Error(), http.StatusNotFound)\r\n+        return\r\n+    }\r\n+\r\n+    w.Header().Set(\"Content-Type\", \"application/json\")\r\n+    json.NewEncoder(w).Encode(pollData)\r\n+}\n\\ No newline at end of file\n"
+                },
+                {
+                    "date": 1747213866701,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -1,5 +1,5 @@\n-package handlerspackage handlers\r\n+package handlers\r\n \r\n import (\r\n     \"encoding/json\"\r\n     \"net/http\"\r\n"
+                },
+                {
+                    "date": 1747213874947,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -4,9 +4,9 @@\n     \"encoding/json\"\r\n     \"net/http\"\r\n \r\n     \"github.com/gorilla/mux\"\r\n-    \"quickpoll/services\"\r\n+    \" backand/services\"\r\n )\r\n \r\n func ViewPollPage(w http.ResponseWriter, r *http.Request) {\r\n     vars := mux.Vars(r)\r\n"
+                },
+                {
+                    "date": 1747220588602,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -4,20 +4,30 @@\n     \"encoding/json\"\r\n     \"net/http\"\r\n \r\n     \"github.com/gorilla/mux\"\r\n-    \" backand/services\"\r\n+    \"backand/services\"\r\n )\r\n \r\n func ViewPollPage(w http.ResponseWriter, r *http.Request) {\r\n     vars := mux.Vars(r)\r\n     pollID := vars[\"id\"]\r\n \r\n-    pollData, err := services.FetchPollData(pollID)\r\n+    // Ambil data polling dari database\r\n+    poll, err := services.GetPollByID(pollID)\r\n     if err != nil {\r\n-        http.Error(w, err.Error(), http.StatusNotFound)\r\n+        http.Error(w, \"Poll not found\", http.StatusNotFound)\r\n         return\r\n     }\r\n \r\n+    // Validasi apakah polling masih aktif & apakah peserta diperbolehkan lihat hasil\r\n+    if !poll.IsClosed && !poll.AllowRealtimeResults {\r\n+        http.Error(w, \"results are hidden until poll is closed\", http.StatusForbidden)\r\n+        return\r\n+    }\r\n+\r\n+    // Lanjutkan ambil hasil polling\r\n+    results := services.ExportPollResults(pollID)\r\n+\r\n     w.Header().Set(\"Content-Type\", \"application/json\")\r\n     json.NewEncoder(w).Encode(pollData)\r\n }\n\\ No newline at end of file\n"
+                },
+                {
+                    "date": 1747220600006,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -11,23 +11,13 @@\n func ViewPollPage(w http.ResponseWriter, r *http.Request) {\r\n     vars := mux.Vars(r)\r\n     pollID := vars[\"id\"]\r\n \r\n-    // Ambil data polling dari database\r\n-    poll, err := services.GetPollByID(pollID)\r\n+    pollData, err := services.FetchPollData(pollID)\r\n     if err != nil {\r\n-        http.Error(w, \"Poll not found\", http.StatusNotFound)\r\n+        http.Error(w, err.Error(), http.StatusNotFound)\r\n         return\r\n     }\r\n \r\n-    // Validasi apakah polling masih aktif & apakah peserta diperbolehkan lihat hasil\r\n-    if !poll.IsClosed && !poll.AllowRealtimeResults {\r\n-        http.Error(w, \"results are hidden until poll is closed\", http.StatusForbidden)\r\n-        return\r\n-    }\r\n-\r\n-    // Lanjutkan ambil hasil polling\r\n-    results := services.ExportPollResults(pollID)\r\n-\r\n     w.Header().Set(\"Content-Type\", \"application/json\")\r\n     json.NewEncoder(w).Encode(pollData)\r\n }\n\\ No newline at end of file\n"
+                },
+                {
+                    "date": 1747220605831,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -21,4 +21,27 @@\n     w.Header().Set(\"Content-Type\", \"application/json\")\r\n     json.NewEncoder(w).Encode(pollData)\r\n }\r\n \r\n+func GetPollResults(w http.ResponseWriter, r *http.Request) {\r\n+    vars := mux.Vars(r)\r\n+    pollID := vars[\"id\"]\r\n+\r\n+    // Ambil data polling dari database\r\n+    poll, err := services.GetPollByID(pollID)\r\n+    if err != nil {\r\n+        http.Error(w, \"Poll not found\", http.StatusNotFound)\r\n+        return\r\n+    }\r\n+\r\n+    // Validasi apakah polling masih aktif & apakah peserta diperbolehkan lihat hasil\r\n+    if !poll.IsClosed && !poll.AllowRealtimeResults {\r\n+        http.Error(w, \"results are hidden until poll is closed\", http.StatusForbidden)\r\n+        return\r\n+    }\r\n+\r\n+    // Lanjutkan ambil hasil polling\r\n+    results := services.ExportPollResults(pollID)\r\n+\r\n+    w.Header().Set(\"Content-Type\", \"application/json\")\r\n+    json.NewEncoder(w).Encode(results)\r\n+}\n\\ No newline at end of file\n"
+                },
+                {
+                    "date": 1747220649564,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -20,5 +20,4 @@\n \r\n     w.Header().Set(\"Content-Type\", \"application/json\")\r\n     json.NewEncoder(w).Encode(pollData)\r\n }\r\n-\r\n"
+                }
+            ],
+            "date": 1747213507350,
+            "name": "Commit-0",
+            "content": "package handlers"
+        }
+    ]
+}

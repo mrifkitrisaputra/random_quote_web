@@ -1,0 +1,18 @@
+{
+    "sourceFile": "backand/handlers/realtime_handler.go",
+    "activeCommit": 0,
+    "commits": [
+        {
+            "activePatchIndex": 0,
+            "patches": [
+                {
+                    "date": 1747241537361,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n"
+                }
+            ],
+            "date": 1747241537361,
+            "name": "Commit-0",
+            "content": "package handlers\r\n\r\nimport (\r\n    \"encoding/json\"\r\n    \"net/http\"\r\n\r\n    \"github.com/gorilla/mux\"\r\n    \"backand/services\"\r\n)\r\n\r\nfunc ToggleRealtimeVisibility(w http.ResponseWriter, r *http.Request) {\r\n    vars := mux.Vars(r)\r\n    pollID := vars[\"id\"]\r\n\r\n    var input struct {\r\n        AllowRealtime bool `json:\"allow_realtime\"`\r\n    }\r\n\r\n    if err := json.NewDecoder(r.Body).Decode(&input); err != nil {\r\n        http.Error(w, \"Invalid request payload\", http.StatusBadRequest)\r\n        return\r\n    }\r\n\r\n    err := services.UpdateAllowRealtime(pollID, input.AllowRealtime)\r\n    if err != nil {\r\n        http.Error(w, `{\"error\": \"`+err.Error()+`\"}`, http.StatusInternalServerError)\r\n        return\r\n    }\r\n\r\n    w.WriteHeader(http.StatusOK)\r\n    json.NewEncoder(w).Encode(map[string]string{\r\n        \"message\": \"Realtime visibility updated\",\r\n    })\r\n}"
+        }
+    ]
+}

@@ -1,0 +1,86 @@
+{
+    "sourceFile": "backand/main.go",
+    "activeCommit": 0,
+    "commits": [
+        {
+            "activePatchIndex": 17,
+            "patches": [
+                {
+                    "date": 1747213134986,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n"
+                },
+                {
+                    "date": 1747213142434,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -4,9 +4,9 @@\n     \"fmt\"\r\n     \"log\"\r\n     \"net/http\"\r\n \r\n-    \"quickpoll/config\"\r\n+    \"backand/config\"\r\n     \"quickpoll/routes\"\r\n )\r\n \r\n func main() {\r\n"
+                },
+                {
+                    "date": 1747213161073,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -5,9 +5,8 @@\n     \"log\"\r\n     \"net/http\"\r\n \r\n     \"backand/config\"\r\n-    \"quickpoll/routes\"\r\n )\r\n \r\n func main() {\r\n     config.Connect()\r\n"
+                },
+                {
+                    "date": 1747213347302,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -5,8 +5,9 @@\n     \"log\"\r\n     \"net/http\"\r\n \r\n     \"backand/config\"\r\n+    \"backand/routes\"\r\n )\r\n \r\n func main() {\r\n     config.Connect()\r\n"
+                },
+                {
+                    "date": 1747214927551,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -11,13 +11,8 @@\n \r\n func main() {\r\n     config.Connect()\r\n \r\n-    // Jalankan migrasi setelah connect DB\r\n-    if err := config.RunMigrations(config.DB); err != nil {\r\n-        log.Fatalf(\"❌ Migration failed: %v\", err)\r\n-    }\r\n-\r\n     r := routes.SetupRoutes()\r\n     fmt.Println(\"🚀 Server running on port 8080\")\r\n     log.Fatal(http.ListenAndServe(\":8080\", r))\r\n }\n\\ No newline at end of file\n"
+                },
+                {
+                    "date": 1747228830234,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -11,8 +11,8 @@\n \r\n func main() {\r\n     config.Connect()\r\n \r\n-    r := routes.SetupRoutes()\r\n-    fmt.Println(\"🚀 Server running on port 8080\")\r\n-    log.Fatal(http.ListenAndServe(\":8080\", r))\r\n-}\n\\ No newline at end of file\n+    fmt.Println(\"Registering routes...\")\r\n+r := routes.SetupRoutes()\r\n+log.Println(\"🚀 Server running on :8080\")\r\n+log.Fatal(http.ListenAndServe(\":8080\", r))\n\\ No newline at end of file\n"
+                },
+                {
+                    "date": 1747228837384,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -11,8 +11,9 @@\n \r\n func main() {\r\n     config.Connect()\r\n \r\n-    fmt.Println(\"Registering routes...\")\r\n+fmt.Println(\"Registering routes...\")\r\n r := routes.SetupRoutes()\r\n log.Println(\"🚀 Server running on :8080\")\r\n\\ No newline at end of file\n-log.Fatal(http.ListenAndServe(\":8080\", r))\n+log.Fatal(http.ListenAndServe(\":8080\", r))\r\n+}\n\\ No newline at end of file\n"
+                },
+                {
+                    "date": 1747228855984,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -1,19 +1,19 @@\n package main\r\n \r\n import (\r\n-    \"fmt\"\r\n-    \"log\"\r\n-    \"net/http\"\r\n+\t\"fmt\"\r\n+\t\"log\"\r\n+\t\"net/http\"\r\n \r\n-    \"backand/config\"\r\n-    \"backand/routes\"\r\n+\t\"backand/config\"\r\n+\t\"backand/routes\"\r\n )\r\n \r\n func main() {\r\n-    config.Connect()\r\n+\tconfig.Connect()\r\n\\ No newline at end of file\n \r\n-fmt.Println(\"Registering routes...\")\r\n-r := routes.SetupRoutes()\r\n-log.Println(\"🚀 Server running on :8080\")\r\n-log.Fatal(http.ListenAndServe(\":8080\", r))\r\n-}\n+\tfmt.Println(\"Registering routes...\")\r\n+\tr := routes.SetupRoutes()\r\n+\tlog.Println(\"🚀 Server running on :8080\")\r\n+\tlog.Fatal(http.ListenAndServe(\":8080\", r))\r\n+}\r\n"
+                },
+                {
+                    "date": 1747238123977,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -3,8 +3,9 @@\n import (\r\n \t\"fmt\"\r\n \t\"log\"\r\n \t\"net/http\"\r\n+\t\"encoding/json\"\r\n \r\n \t\"backand/config\"\r\n \t\"backand/routes\"\r\n )\r\n@@ -15,5 +16,5 @@\n \tfmt.Println(\"Registering routes...\")\r\n \tr := routes.SetupRoutes()\r\n \tlog.Println(\"🚀 Server running on :8080\")\r\n \tlog.Fatal(http.ListenAndServe(\":8080\", r))\r\n-}\n\\ No newline at end of file\n+}\r\n"
+                },
+                {
+                    "date": 1747238133661,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -3,10 +3,10 @@\n import (\r\n \t\"fmt\"\r\n \t\"log\"\r\n \t\"net/http\"\r\n-\t\"encoding/json\"\r\n \r\n+\r\n \t\"backand/config\"\r\n \t\"backand/routes\"\r\n )\r\n \r\n"
+                },
+                {
+                    "date": 1747281460253,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -1,20 +1,27 @@\n package main\r\n \r\n import (\r\n-\t\"fmt\"\r\n-\t\"log\"\r\n-\t\"net/http\"\r\n-\r\n-\r\n-\t\"backand/config\"\r\n-\t\"backand/routes\"\r\n+    \"backand/routes\"\r\n+    \"github.com/gorilla/mux\"\r\n+    \"github.com/rs/cors\"\r\n+    \"net/http\"\r\n )\r\n \r\n func main() {\r\n-\tconfig.Connect()\r\n+    r := mux.NewRouter()\r\n+    routes.SetupRoutes(r)\r\n \r\n-\tfmt.Println(\"Registering routes...\")\r\n-\tr := routes.SetupRoutes()\r\n-\tlog.Println(\"🚀 Server running on :8080\")\r\n-\tlog.Fatal(http.ListenAndServe(\":8080\", r))\r\n-}\r\n+    // Setup CORS\r\n+    c := cors.New(cors.Options{\r\n+        AllowedOrigins:   []string{\"http://localhost:3000\", \"http://localhost:5173\"}, // Sesuaikan dengan port frontend kamu\r\n+        AllowedMethods:   []string{\"GET\", \"POST\", \"PUT\", \"DELETE\", \"OPTIONS\"},\r\n+        AllowedHeaders:   []string{\"Content-Type\", \"Accept\", \"Authorization\"},\r\n+        AllowCredentials: true,\r\n+    })\r\n+\r\n+    handler := c.Handler(r)\r\n+\r\n+    // Jalankan server\r\n+    println(\"Server running on :8080\")\r\n+    http.ListenAndServe(\":8080\", handler)\r\n+}\n\\ No newline at end of file\n"
+                },
+                {
+                    "date": 1747281479862,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -12,9 +12,9 @@\n     routes.SetupRoutes(r)\r\n \r\n     // Setup CORS\r\n     c := cors.New(cors.Options{\r\n-        AllowedOrigins:   []string{\"http://localhost:3000\", \"http://localhost:5173\"}, // Sesuaikan dengan port frontend kamu\r\n+        AllowedOrigins:   []string{ \"http://localhost:5173\"}, // Sesuaikan dengan port frontend kamu\r\n         AllowedMethods:   []string{\"GET\", \"POST\", \"PUT\", \"DELETE\", \"OPTIONS\"},\r\n         AllowedHeaders:   []string{\"Content-Type\", \"Accept\", \"Authorization\"},\r\n         AllowCredentials: true,\r\n     })\r\n"
+                },
+                {
+                    "date": 1747281534761,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -1,27 +1,19 @@\n package main\r\n \r\n import (\r\n-    \"backand/routes\"\r\n-    \"github.com/gorilla/mux\"\r\n-    \"github.com/rs/cors\"\r\n-    \"net/http\"\r\n+\t\"fmt\"\r\n+\t\"log\"\r\n+\t\"net/http\"\r\n+\r\n+\t\"backand/config\"\r\n+\t\"backand/routes\"\r\n )\r\n \r\n func main() {\r\n-    r := mux.NewRouter()\r\n-    routes.SetupRoutes(r)\r\n+\tconfig.Connect()\r\n \r\n-    // Setup CORS\r\n-    c := cors.New(cors.Options{\r\n-        AllowedOrigins:   []string{ \"http://localhost:5173\"}, // Sesuaikan dengan port frontend kamu\r\n-        AllowedMethods:   []string{\"GET\", \"POST\", \"PUT\", \"DELETE\", \"OPTIONS\"},\r\n-        AllowedHeaders:   []string{\"Content-Type\", \"Accept\", \"Authorization\"},\r\n-        AllowCredentials: true,\r\n-    })\r\n\\ No newline at end of file\n-\r\n-    handler := c.Handler(r)\r\n-\r\n-    // Jalankan server\r\n-    println(\"Server running on :8080\")\r\n-    http.ListenAndServe(\":8080\", handler)\r\n-}\n+\tfmt.Println(\"Registering routes...\")\r\n+\tr := routes.SetupRoutes()\r\n+\tlog.Println(\"🚀 Server running on :8080\")\r\n+\tlog.Fatal(http.ListenAndServe(\":8080\", r))\r\n+}\r\n"
+                },
+                {
+                    "date": 1747281557945,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -1,19 +1,27 @@\n package main\r\n \r\n import (\r\n-\t\"fmt\"\r\n-\t\"log\"\r\n-\t\"net/http\"\r\n-\r\n-\t\"backand/config\"\r\n-\t\"backand/routes\"\r\n+    \"backand/routes\"\r\n+    \"github.com/gorilla/mux\"\r\n+    \"github.com/rs/cors\"\r\n+    \"net/http\"\r\n )\r\n \r\n func main() {\r\n-\tconfig.Connect()\r\n+    r := mux.NewRouter()\r\n+    routes.SetupRoutes(r)\r\n \r\n-\tfmt.Println(\"Registering routes...\")\r\n-\tr := routes.SetupRoutes()\r\n-\tlog.Println(\"🚀 Server running on :8080\")\r\n-\tlog.Fatal(http.ListenAndServe(\":8080\", r))\r\n-}\r\n+    // Setup CORS\r\n+    c := cors.New(cors.Options{\r\n+        AllowedOrigins:   []string{\"http://localhost:3000\", \"http://localhost:5173\"}, // Sesuaikan dengan port frontend kamu\r\n+        AllowedMethods:   []string{\"GET\", \"POST\", \"PUT\", \"DELETE\", \"OPTIONS\"},\r\n+        AllowedHeaders:   []string{\"Content-Type\", \"Accept\", \"Authorization\"},\r\n+        AllowCredentials: true,\r\n+    })\r\n+\r\n+    handler := c.Handler(r)\r\n+\r\n+    // Jalankan server\r\n+    println(\"Server running on :8080\")\r\n+    http.ListenAndServe(\":8080\", handler)\r\n+}\n\\ No newline at end of file\n"
+                },
+                {
+                    "date": 1747283619764,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -1,27 +1,27 @@\n package main\r\n \r\n import (\r\n-    \"backand/routes\"\r\n+    \"fmt\"\r\n+    \"net/http\"\r\n     \"github.com/gorilla/mux\"\r\n     \"github.com/rs/cors\"\r\n-    \"net/http\"\r\n+    \"backand/config\"\r\n )\r\n \r\n func main() {\r\n+    config.InitDB() // ✅ Harus dijalankan dulu!\r\n+\r\n     r := mux.NewRouter()\r\n     routes.SetupRoutes(r)\r\n \r\n-    // Setup CORS\r\n     c := cors.New(cors.Options{\r\n-        AllowedOrigins:   []string{\"http://localhost:3000\", \"http://localhost:5173\"}, // Sesuaikan dengan port frontend kamu\r\n-        AllowedMethods:   []string{\"GET\", \"POST\", \"PUT\", \"DELETE\", \"OPTIONS\"},\r\n-        AllowedHeaders:   []string{\"Content-Type\", \"Accept\", \"Authorization\"},\r\n-        AllowCredentials: true,\r\n+        AllowedOrigins: []string{\"http://localhost:3000\", \"http://localhost:5173\"},\r\n+        AllowedMethods: []string{\"GET\", \"POST\", \"PUT\", \"DELETE\", \"OPTIONS\"},\r\n+        AllowedHeaders: []string{\"Content-Type\"},\r\n     })\r\n \r\n     handler := c.Handler(r)\r\n \r\n-    // Jalankan server\r\n-    println(\"Server running on :8080\")\r\n+    fmt.Println(\"Server running on :8080\")\r\n     http.ListenAndServe(\":8080\", handler)\r\n }\n\\ No newline at end of file\n"
+                },
+                {
+                    "date": 1747283638440,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -5,8 +5,9 @@\n     \"net/http\"\r\n     \"github.com/gorilla/mux\"\r\n     \"github.com/rs/cors\"\r\n     \"backand/config\"\r\n+\t\"backand/routes\"\r\n )\r\n \r\n func main() {\r\n     config.InitDB() // ✅ Harus dijalankan dulu!\r\n"
+                },
+                {
+                    "date": 1747285663043,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -16,10 +16,9 @@\n     routes.SetupRoutes(r)\r\n \r\n     c := cors.New(cors.Options{\r\n         AllowedOrigins: []string{\"http://localhost:3000\", \"http://localhost:5173\"},\r\n-        AllowedMethods: []string{\"GET\", \"POST\", \"PUT\", \"DELETE\", \"OPTIONS\"},\r\n-        AllowedHeaders: []string{\"Content-Type\"},\r\n+        AllowedMethods: []string{\"GET\", \"POST\", \"PUT\", \"DELETE\", \"OPTIONS\"\r\n     })\r\n \r\n     handler := c.Handler(r)\r\n \r\n"
+                },
+                {
+                    "date": 1747285670881,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -16,9 +16,9 @@\n     routes.SetupRoutes(r)\r\n \r\n     c := cors.New(cors.Options{\r\n         AllowedOrigins: []string{\"http://localhost:3000\", \"http://localhost:5173\"},\r\n-        AllowedMethods: []string{\"GET\", \"POST\", \"PUT\", \"DELETE\", \"OPTIONS\"},\r\n+        AllowedMethods: []string{*},\r\n         AllowedHeaders: []string{\"Content-Type\"},\r\n     })\r\n \r\n     handler := c.Handler(r)\r\n"
+                }
+            ],
+            "date": 1747213134986,
+            "name": "Commit-0",
+            "content": "package main\r\n\r\nimport (\r\n    \"fmt\"\r\n    \"log\"\r\n    \"net/http\"\r\n\r\n    \"quickpoll/config\"\r\n    \"quickpoll/routes\"\r\n)\r\n\r\nfunc main() {\r\n    config.Connect()\r\n\r\n    // Jalankan migrasi setelah connect DB\r\n    if err := config.RunMigrations(config.DB); err != nil {\r\n        log.Fatalf(\"❌ Migration failed: %v\", err)\r\n    }\r\n\r\n    r := routes.SetupRoutes()\r\n    fmt.Println(\"🚀 Server running on port 8080\")\r\n    log.Fatal(http.ListenAndServe(\":8080\", r))\r\n}"
+        }
+    ]
+}

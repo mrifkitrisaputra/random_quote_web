@@ -1,0 +1,18 @@
+{
+    "sourceFile": "backand/migrations/3_create_votes.up.sql",
+    "activeCommit": 0,
+    "commits": [
+        {
+            "activePatchIndex": 0,
+            "patches": [
+                {
+                    "date": 1747212842584,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n"
+                }
+            ],
+            "date": 1747212842584,
+            "name": "Commit-0",
+            "content": "CREATE TABLE IF NOT EXISTS votes (\r\n    id BIGINT AUTO_INCREMENT PRIMARY KEY,\r\n    poll_id VARCHAR(32),\r\n    option_id INT NOT NULL,\r\n    user_key VARCHAR(255) NOT NULL,\r\n    voted_at DATETIME DEFAULT CURRENT_TIMESTAMP,\r\n    FOREIGN KEY (poll_id) REFERENCES polls(id) ON DELETE CASCADE,\r\n    FOREIGN KEY (option_id) REFERENCES poll_options(id)\r\n);\r\n\r\nCREATE INDEX idx_poll_user ON votes(poll_id, user_key);\r\nCREATE INDEX idx_poll_option ON votes(poll_id, option_id);"
+        }
+    ]
+}

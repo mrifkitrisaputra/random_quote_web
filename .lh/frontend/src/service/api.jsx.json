@@ -1,0 +1,38 @@
+{
+    "sourceFile": "frontend/src/service/api.jsx",
+    "activeCommit": 0,
+    "commits": [
+        {
+            "activePatchIndex": 5,
+            "patches": [
+                {
+                    "date": 1747279145195,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n"
+                },
+                {
+                    "date": 1747279875950,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -1,18 +1,21 @@\n import axios from 'axios';\r\n \r\n const apiClient = axios.create({\r\n     baseURL: 'http://localhost:8080/api',\r\n+    headers: {\r\n+        'Content-Type': 'application/json'\r\n+    }\r\n });\r\n \r\n export const createPoll = async (data) => {\r\n     const res = await apiClient.post('/polls', data);\r\n     return res.data;\r\n };\r\n \r\n-export const getPollDetails = async (pollID) => {\r\n-    const res = await apiClient.get(`/polls/${pollID}`);\r\n-    return res.data;\r\n+export const fetchDashboardPolls = async () => {\r\n+    const res = await apiClient.get('/dashboard');\r\n+    return res.data.polls || [];\r\n };\r\n \r\n export const castVote = async (pollID, optionID, userKey) => {\r\n     const res = await apiClient.post(`/polls/${pollID}/vote`, {\r\n@@ -21,23 +24,21 @@\n     });\r\n     return res.data;\r\n };\r\n \r\n-export const closePoll = async (pollID) => {\r\n-    const res = await apiClient.put(`/polls/${pollID}/close`);\r\n+export const getPollDetails = async (pollID) => {\r\n+    const res = await apiClient.get(`/polls/${pollID}`);\r\n     return res.data;\r\n };\r\n \r\n-export const deletePoll = async (pollID) => {\r\n-    const res = await apiClient.delete(`/polls/${pollID}`);\r\n-    return res.data;\r\n-};\r\n-\r\n export const exportPollResults = async (pollID) => {\r\n     const res = await apiClient.get(`/polls/${pollID}/export`);\r\n     return res.data;\r\n };\r\n \r\n-export const fetchDashboardPolls = async () => {\r\n-    const res = await apiClient.get('/dashboard');\r\n+// 🔁 Tambahkan fungsi toggle visibility\r\n+export const toggleRealtimeVisibility = async (pollID, allow) => {\r\n+    const res = await apiClient.put(`/polls/${pollID}/toggle-realtime`, {\r\n+        allow_realtime: allow\r\n+    });\r\n     return res.data;\r\n };\n\\ No newline at end of file\n"
+                },
+                {
+                    "date": 1747280052937,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -16,8 +16,10 @@\n     const res = await apiClient.get('/dashboard');\r\n     return res.data.polls || [];\r\n };\r\n \r\n+\r\n+\r\n export const castVote = async (pollID, optionID, userKey) => {\r\n     const res = await apiClient.post(`/polls/${pollID}/vote`, {\r\n         option_id: optionID,\r\n         user_key: userKey\r\n"
+                },
+                {
+                    "date": 1747280259531,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -37,10 +37,4 @@\n     return res.data;\r\n };\r\n \r\n // 🔁 Tambahkan fungsi toggle visibility\r\n-export const toggleRealtimeVisibility = async (pollID, allow) => {\r\n-    const res = await apiClient.put(`/polls/${pollID}/toggle-realtime`, {\r\n-        allow_realtime: allow\r\n-    });\r\n-    return res.data;\r\n-};\n\\ No newline at end of file\n"
+                },
+                {
+                    "date": 1747280266595,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -51,5 +51,6 @@\n // 7. Ekspor hasil polling\r\n export const exportPollResults = async (pollID) => {\r\n     const res = await apiClient.get(`/polls/${pollID}/export`);\r\n     return res.data;\r\n-};\n\\ No newline at end of file\n+};\r\n+\r\n"
+                },
+                {
+                    "date": 1747280272003,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -0,0 +1,62 @@\n+import axios from 'axios';\r\n+\r\n+const apiClient = axios.create({\r\n+    baseURL: 'http://localhost:8080/api',\r\n+    headers: {\r\n+        'Content-Type': 'application/json'\r\n+    }\r\n+});\r\n+\r\n+// 1. Membuat polling baru\r\n+export const createPoll = async (data) => {\r\n+    const res = await apiClient.post('/polls', data);\r\n+    return res.data;\r\n+};\r\n+\r\n+// 2. Ambil semua polling untuk dashboard\r\n+export const fetchDashboardPolls = async () => {\r\n+    const res = await apiClient.get('/dashboard');\r\n+    return res.data.polls || [];\r\n+};\r\n+\r\n+// 3. Voting\r\n+export const castVote = async (pollID, optionID, userKey) => {\r\n+    const res = await apiClient.post(`/polls/${pollID}/vote`, {\r\n+        option_id: optionID,\r\n+        user_key: userKey\r\n+    });\r\n+    return res.data;\r\n+};\r\n+\r\n+// 4. Ambil detail polling\r\n+export const getPollDetails = async (pollID) => {\r\n+    const res = await apiClient.get(`/polls/${pollID}`);\r\n+    return res.data;\r\n+};\r\n+\r\n+// 🔁 Tambahkan fungsi tambahan dari routes.go\r\n+\r\n+// 5. Tutup polling\r\n+export const closePoll = async (pollID) => {\r\n+    const res = await apiClient.put(`/polls/${pollID}/close`, {});\r\n+    return res.data;\r\n+};\r\n+\r\n+// 6. Hapus polling\r\n+export const deletePoll = async (pollID) => {\r\n+    const res = await apiClient.delete(`/polls/${pollID}`);\r\n+    return res.data;\r\n+};\r\n+\r\n+// 7. Ekspor hasil polling\r\n+export const exportPollResults = async (pollID) => {\r\n+    const res = await apiClient.get(`/polls/${pollID}/export`);\r\n+    return res.data;\r\n+};\r\n+\r\n+export const toggleRealtimeVisibility = async (pollID, allow) => {\r\n+    const res = await apiClient.put(`/polls/${pollID}/toggle-realtime`, {\r\n+        allow_realtime: allow\r\n+    });\r\n+    return res.data;\r\n+};\n\\ No newline at end of file\n"
+                }
+            ],
+            "date": 1747279145195,
+            "name": "Commit-0",
+            "content": "import axios from 'axios';\r\n\r\nconst apiClient = axios.create({\r\n    baseURL: 'http://localhost:8080/api',\r\n});\r\n\r\nexport const createPoll = async (data) => {\r\n    const res = await apiClient.post('/polls', data);\r\n    return res.data;\r\n};\r\n\r\nexport const getPollDetails = async (pollID) => {\r\n    const res = await apiClient.get(`/polls/${pollID}`);\r\n    return res.data;\r\n};\r\n\r\nexport const castVote = async (pollID, optionID, userKey) => {\r\n    const res = await apiClient.post(`/polls/${pollID}/vote`, {\r\n        option_id: optionID,\r\n        user_key: userKey\r\n    });\r\n    return res.data;\r\n};\r\n\r\nexport const closePoll = async (pollID) => {\r\n    const res = await apiClient.put(`/polls/${pollID}/close`);\r\n    return res.data;\r\n};\r\n\r\nexport const deletePoll = async (pollID) => {\r\n    const res = await apiClient.delete(`/polls/${pollID}`);\r\n    return res.data;\r\n};\r\n\r\nexport const exportPollResults = async (pollID) => {\r\n    const res = await apiClient.get(`/polls/${pollID}/export`);\r\n    return res.data;\r\n};\r\n\r\nexport const fetchDashboardPolls = async () => {\r\n    const res = await apiClient.get('/dashboard');\r\n    return res.data;\r\n};"
+        }
+    ]
+}

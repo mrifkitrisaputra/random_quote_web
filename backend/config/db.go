@@ -2,21 +2,26 @@ package config
 
 import (
     "database/sql"
-    _ "github.com/go-sql-driver/mysql"
+    "fmt"
     "log"
+
+    _ "github.com/go-sql-driver/mysql"
 )
 
 var DB *sql.DB
 
 func InitDB() {
     var err error
-    DB, err = sql.Open("mysql", "root:@tcp(127.0.0.1:3307)/quickpoll")
+    dsn := "root:@tcp(127.0.0.1:3307)/db_quickpoll?parseTime=true"
+    DB, err = sql.Open("mysql", dsn)
     if err != nil {
-        log.Fatal("Database connection failed: ", err)
+        log.Fatal("Error opening database:", err)
     }
 
-    if err = DB.Ping(); err != nil {
-        log.Fatal("Database ping failed: ", err)
+    err = DB.Ping()
+    if err != nil {
+        log.Fatal("Error connecting to database:", err)
     }
-    log.Println("Database connected")
+
+    fmt.Println("Connected to MySQL database")
 }

@@ -1,0 +1,50 @@
+{
+    "sourceFile": "backand/services/createpoll_service.go",
+    "activeCommit": 0,
+    "commits": [
+        {
+            "activePatchIndex": 8,
+            "patches": [
+                {
+                    "date": 1747213535159,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n"
+                },
+                {
+                    "date": 1747213924150,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -1,1 +1,55 @@\n-package services\n\\ No newline at end of file\n+package services\r\n+\r\n+import (\r\n+    \"crypto/rand\"\r\n+    \"database/sql\"\r\n+    \"fmt\"\r\n+    \"time\"\r\n+\r\n+    \"quickpoll/config\"\r\n+)\r\n+\r\n+func CreatePoll(title, description, expiresAt string, options []string) (string, string, error) {\r\n+    pollID := generatePollID()\r\n+    now := time.Now().Format(\"2006-01-02 15:04:05\")\r\n+\r\n+    expires, err := time.Parse(\"2006-01-02 15:04:05\", expiresAt)\r\n+    if err != nil {\r\n+        return \"\", \"\", fmt.Errorf(\"invalid expiration date\")\r\n+    }\r\n+\r\n+    tx, err := config.DB.Begin()\r\n+    if err != nil {\r\n+        return \"\", \"\", err\r\n+    }\r\n+\r\n+    _, err = tx.Exec(\"INSERT INTO polls (id, title, description, created_at, expires_at, status) VALUES (?, ?, ?, ?, ?, ?)\",\r\n+        pollID, title, description, now, expires, \"open\")\r\n+    if err != nil {\r\n+        tx.Rollback()\r\n+        return \"\", \"\", err\r\n+    }\r\n+\r\n+    for i, opt := range options {\r\n+        _, err = tx.Exec(\"INSERT INTO poll_options (poll_id, option_text, order_index) VALUES (?, ?, ?)\",\r\n+            pollID, opt, i)\r\n+        if err != nil {\r\n+            tx.Rollback()\r\n+            return \"\", \"\", err\r\n+        }\r\n+    }\r\n+\r\n+    err = tx.Commit()\r\n+    if err != nil {\r\n+        return \"\", \"\", err\r\n+    }\r\n+\r\n+    url := fmt.Sprintf(\"https://quickpoll/polls/%s\", pollID)\r\n+    return pollID, url, nil\r\n+}\r\n+\r\n+func generatePollID() string {\r\n+    b := make([]byte, 8)\r\n+    rand.Read(b)\r\n+    return fmt.Sprintf(\"%x\", b)\r\n+}\n\\ No newline at end of file\n"
+                },
+                {
+                    "date": 1747213929411,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -5,9 +5,9 @@\n     \"database/sql\"\r\n     \"fmt\"\r\n     \"time\"\r\n \r\n-    \"quickpoll/config\"\r\n+    \"backand/config\"\r\n )\r\n \r\n func CreatePoll(title, description, expiresAt string, options []string) (string, string, error) {\r\n     pollID := generatePollID()\r\n"
+                },
+                {
+                    "date": 1747214158753,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -1,9 +1,8 @@\n package services\r\n \r\n import (\r\n     \"crypto/rand\"\r\n-    \"database/sql\"\r\n     \"fmt\"\r\n     \"time\"\r\n \r\n     \"backand/config\"\r\n"
+                },
+                {
+                    "date": 1747220361902,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -7,9 +7,9 @@\n \r\n     \"backand/config\"\r\n )\r\n \r\n-func CreatePoll(title, description, expiresAt string, options []string) (string, string, error) {\r\n+func CreatePoll(title, description, expiresAt string, options []string, allowRealtime bool) (string, string, error) {\r\n     pollID := generatePollID()\r\n     now := time.Now().Format(\"2006-01-02 15:04:05\")\r\n \r\n     expires, err := time.Parse(\"2006-01-02 15:04:05\", expiresAt)\r\n@@ -21,10 +21,14 @@\n     if err != nil {\r\n         return \"\", \"\", err\r\n     }\r\n \r\n-    _, err = tx.Exec(\"INSERT INTO polls (id, title, description, created_at, expires_at, status) VALUES (?, ?, ?, ?, ?, ?)\",\r\n-        pollID, title, description, now, expires, \"open\")\r\n+    _, err = tx.Exec(`\r\n+        INSERT INTO polls (\r\n+            id, title, description, created_at, expires_at, status, allow_realtime_results\r\n+        ) VALUES (?, ?, ?, ?, ?, ?, ?)`,\r\n+        pollID, title, description, now, expires, \"open\", allowRealtime,\r\n+    )\r\n     if err != nil {\r\n         tx.Rollback()\r\n         return \"\", \"\", err\r\n     }\r\n"
+                },
+                {
+                    "date": 1747282786312,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -7,9 +7,9 @@\n \r\n     \"backand/config\"\r\n )\r\n \r\n-func CreatePoll(title, description, expiresAt string, options []string, allowRealtime bool) (string, string, error) {\r\n+func CreatePoll(title, description, expiresAt time.Time string, options []string, allowRealtime bool) (string, string, error) {\r\n     pollID := generatePollID()\r\n     now := time.Now().Format(\"2006-01-02 15:04:05\")\r\n \r\n     expires, err := time.Parse(\"2006-01-02 15:04:05\", expiresAt)\r\n"
+                },
+                {
+                    "date": 1747282793063,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -7,9 +7,9 @@\n \r\n     \"backand/config\"\r\n )\r\n \r\n-func CreatePoll(title, description, expiresAt time.Time string, options []string, allowRealtime bool) (string, string, error) {\r\n+func CreatePoll(title, description, expiresAt time.Time, string, options []string, allowRealtime bool) (string, string, error) {\r\n     pollID := generatePollID()\r\n     now := time.Now().Format(\"2006-01-02 15:04:05\")\r\n \r\n     expires, err := time.Parse(\"2006-01-02 15:04:05\", expiresAt)\r\n"
+                },
+                {
+                    "date": 1747282800634,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -7,9 +7,9 @@\n \r\n     \"backand/config\"\r\n )\r\n \r\n-func CreatePoll(title, description, expiresAt time.Time, string, options []string, allowRealtime bool) (string, string, error) {\r\n+func CreatePoll(title, description, expiresAt time.Time, options []string, allowRealtime bool) (string, string, error) {\r\n     pollID := generatePollID()\r\n     now := time.Now().Format(\"2006-01-02 15:04:05\")\r\n \r\n     expires, err := time.Parse(\"2006-01-02 15:04:05\", expiresAt)\r\n"
+                },
+                {
+                    "date": 1747282987104,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -7,9 +7,9 @@\n \r\n     \"backand/config\"\r\n )\r\n \r\n-func CreatePoll(title, description, expiresAt time.Time, options []string, allowRealtime bool) (string, string, error) {\r\n+func CreatePoll(title, description, expiresAt string, options []string, allowRealtime bool) (string, string, error) {\r\n     pollID := generatePollID()\r\n     now := time.Now().Format(\"2006-01-02 15:04:05\")\r\n \r\n     expires, err := time.Parse(\"2006-01-02 15:04:05\", expiresAt)\r\n"
+                }
+            ],
+            "date": 1747213535159,
+            "name": "Commit-0",
+            "content": "package services"
+        }
+    ]
+}

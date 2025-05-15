@@ -1,0 +1,62 @@
+{
+    "sourceFile": "backand/handlers/vote_handler.go",
+    "activeCommit": 0,
+    "commits": [
+        {
+            "activePatchIndex": 11,
+            "patches": [
+                {
+                    "date": 1747213509671,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n"
+                },
+                {
+                    "date": 1747213833742,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -1,1 +1,2 @@\n-package handlers\n\\ No newline at end of file\n+package handlers\r\n+\r\n"
+                },
+                {
+                    "date": 1747213847491,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -1,2 +1,33 @@\n package handlers\r\n \r\n+import (\r\n+    \"encoding/json\"\r\n+    \"net/http\"\r\n+\r\n+    \"github.com/gorilla/mux\"\r\n+    \"backand/services\"\r\n+)\r\n+\r\n+func CastVote(w http.ResponseWriter, r *http.Request) {\r\n+    vars := mux.Vars(r)\r\n+    pollID := vars[\"id\"]\r\n+\r\n+    var input struct {\r\n+        OptionID int    `json:\"option_id\"`\r\n+        UserKey  string `json:\"user_key\"`\r\n+    }\r\n+\r\n+    if err := json.NewDecoder(r.Body).Decode(&input); err != nil {\r\n+        http.Error(w, \"Invalid request payload\", http.StatusBadRequest)\r\n+        return\r\n+    }\r\n+\r\n+    err := services.CastVote(pollID, input.OptionID, input.UserKey)\r\n+    if err != nil {\r\n+        http.Error(w, err.Error(), http.StatusInternalServerError)\r\n+        return\r\n+    }\r\n+\r\n+    w.WriteHeader(http.StatusOK)\r\n+    json.NewEncoder(w).Encode(map[string]string{\"message\": \"Vote successful\"})\r\n+}\n\\ No newline at end of file\n"
+                },
+                {
+                    "date": 1747235836675,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -1,14 +1,4 @@\n-package handlers\r\n-\r\n-import (\r\n-    \"encoding/json\"\r\n-    \"net/http\"\r\n-\r\n-    \"github.com/gorilla/mux\"\r\n-    \"backand/services\"\r\n-)\r\n-\r\n func CastVote(w http.ResponseWriter, r *http.Request) {\r\n     vars := mux.Vars(r)\r\n     pollID := vars[\"id\"]\r\n \r\n"
+                },
+                {
+                    "date": 1747235843279,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -1,4 +1,14 @@\n+package handlers\r\n+\r\n+import (\r\n+    \"encoding/json\"\r\n+    \"net/http\"\r\n+\r\n+    \"github.com/gorilla/mux\"\r\n+    \"backand/services\"\r\n+)\r\n+\r\n func CastVote(w http.ResponseWriter, r *http.Request) {\r\n     vars := mux.Vars(r)\r\n     pollID := vars[\"id\"]\r\n \r\n"
+                },
+                {
+                    "date": 1747236600155,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -0,0 +1,33 @@\n+package handlers\r\n+\r\n+import (\r\n+    \"encoding/json\"\r\n+    \"net/http\"\r\n+\r\n+    \"github.com/gorilla/mux\"\r\n+    \"backand/services\"\r\n+)\r\n+\r\n+func CastVote(w http.ResponseWriter, r *http.Request) {\r\n+    vars := mux.Vars(r)\r\n+    pollID := vars[\"id\"]\r\n+\r\n+    var input struct {\r\n+        OptionID int    `json:\"option_id\"`\r\n+        UserKey  string `json:\"user_key\"`\r\n+    }\r\n+\r\n+    if err := json.NewDecoder(r.Body).Decode(&input); err != nil {\r\n+        http.Error(w, \"Invalid request payload\", http.StatusBadRequest)\r\n+        return\r\n+    }\r\n+\r\n+    err := services.CastVote(pollID, input.OptionID, input.UserKey)\r\n+    if err != nil {\r\n+        http.Error(w, err.Error(), http.StatusInternalServerError)\r\n+        return\r\n+    }\r\n+\r\n+    w.WriteHeader(http.StatusOK)\r\n+    json.NewEncoder(w).Encode(map[string]string{\"message\": \"Vote successful\"})\r\n+}\n\\ No newline at end of file\n"
+                },
+                {
+                    "date": 1747236606075,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -29,38 +29,5 @@\n     }\r\n \r\n     w.WriteHeader(http.StatusOK)\r\n     json.NewEncoder(w).Encode(map[string]string{\"message\": \"Vote successful\"})\r\n-}\n-package handlers\r\n-\r\n-import (\r\n-    \"encoding/json\"\r\n-    \"net/http\"\r\n-\r\n-    \"github.com/gorilla/mux\"\r\n-    \"backand/services\"\r\n-)\r\n-\r\n-func CastVote(w http.ResponseWriter, r *http.Request) {\r\n-    vars := mux.Vars(r)\r\n-    pollID := vars[\"id\"]\r\n-\r\n-    var input struct {\r\n-        OptionID int    `json:\"option_id\"`\r\n-        UserKey  string `json:\"user_key\"`\r\n-    }\r\n-\r\n-    if err := json.NewDecoder(r.Body).Decode(&input); err != nil {\r\n-        http.Error(w, \"Invalid request payload\", http.StatusBadRequest)\r\n-        return\r\n-    }\r\n-\r\n-    err := services.CastVote(pollID, input.OptionID, input.UserKey)\r\n-    if err != nil {\r\n-        http.Error(w, err.Error(), http.StatusInternalServerError)\r\n-        return\r\n-    }\r\n-\r\n-    w.WriteHeader(http.StatusOK)\r\n-    json.NewEncoder(w).Encode(map[string]string{\"message\": \"Vote successful\"})\r\n }\n\\ No newline at end of file\n"
+                },
+                {
+                    "date": 1747236705264,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -4,9 +4,9 @@\n     \"encoding/json\"\r\n     \"net/http\"\r\n \r\n     \"github.com/gorilla/mux\"\r\n-    \"backand/services\"\r\n+    \"quickpoll/services\"\r\n )\r\n \r\n func CastVote(w http.ResponseWriter, r *http.Request) {\r\n     vars := mux.Vars(r)\r\n"
+                },
+                {
+                    "date": 1747236890732,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -4,9 +4,9 @@\n     \"encoding/json\"\r\n     \"net/http\"\r\n \r\n     \"github.com/gorilla/mux\"\r\n-    \"quickpoll/services\"\r\n+    \"backand/services\"\r\n )\r\n \r\n func CastVote(w http.ResponseWriter, r *http.Request) {\r\n     vars := mux.Vars(r)\r\n@@ -28,6 +28,8 @@\n         return\r\n     }\r\n \r\n     w.WriteHeader(http.StatusOK)\r\n-    json.NewEncoder(w).Encode(map[string]string{\"message\": \"Vote successful\"})\r\n+    json.NewEncoder(w).Encode(map[string]interface{}{\r\n+    \"message\": \"Vote successful\",\r\n+})\r\n }\n\\ No newline at end of file\n"
+                },
+                {
+                    "date": 1747237762296,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -28,8 +28,6 @@\n         return\r\n     }\r\n \r\n     w.WriteHeader(http.StatusOK)\r\n-    json.NewEncoder(w).Encode(map[string]interface{}{\r\n-    \"message\": \"Vote successful\",\r\n-})\r\n+    json.NewEncoder(w).Encode(map[string]string{\"message\": \"Vote successful\"})\r\n }\n\\ No newline at end of file\n"
+                },
+                {
+                    "date": 1747238005614,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -28,6 +28,8 @@\n         return\r\n     }\r\n \r\n     w.WriteHeader(http.StatusOK)\r\n-    json.NewEncoder(w).Encode(map[string]string{\"message\": \"Vote successful\"})\r\n+    json.NewEncoder(w).Encode(map[string]interface{}{\r\n+    \"message\": \"Vote successful\",\r\n+})\r\n }\n\\ No newline at end of file\n"
+                },
+                {
+                    "date": 1747238379284,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -28,8 +28,6 @@\n         return\r\n     }\r\n \r\n     w.WriteHeader(http.StatusOK)\r\n-    json.NewEncoder(w).Encode(map[string]interface{}{\r\n-    \"message\": \"Vote successful\",\r\n-})\r\n+    json.NewEncoder(w).Encode(map[string]string{\"message\": \"Vote successful\"})\r\n }\n\\ No newline at end of file\n"
+                }
+            ],
+            "date": 1747213509671,
+            "name": "Commit-0",
+            "content": "package handlers"
+        }
+    ]
+}

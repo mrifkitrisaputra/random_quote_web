@@ -1,0 +1,38 @@
+{
+    "sourceFile": "frontend/vite.config.js",
+    "activeCommit": 0,
+    "commits": [
+        {
+            "activePatchIndex": 5,
+            "patches": [
+                {
+                    "date": 1747278113149,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n"
+                },
+                {
+                    "date": 1747278121086,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -0,0 +1,10 @@\n+import { defineConfig } from 'vite'\n+import react from '@vitejs/plugin-react'\n+\n+// https://vite.dev/config/\n+export default defineConfig({\n+  plugins: [\n+    react(),\n+    \n+  ],\n+})\n"
+                },
+                {
+                    "date": 1747278126192,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -0,0 +1,10 @@\n+import { defineConfig } from 'vite'\n+import react from '@vitejs/plugin-react'\n+\n+// https://vite.dev/config/\n+export default defineConfig({\n+  plugins: [\n+    react(),\n+    tailwind()\n+  ],\n+})\n"
+                },
+                {
+                    "date": 1747278131541,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -0,0 +1,10 @@\n+import { defineConfig } from 'vite'\n+import react from '@vitejs/plugin-react'\n+\n+// https://vite.dev/config/\n+export default defineConfig({\n+  plugins: [\n+    react(),\n+    tailwindcss()\n+  ],\n+})\n"
+                },
+                {
+                    "date": 1747278139714,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -0,0 +1,11 @@\n+import { defineConfig } from 'vite'\n+import react from '@vitejs/plugin-react'\n+import tailwindcss from '@tailwindcss/vite'\n+\n+// https://vite.dev/config/\n+export default defineConfig({\n+  plugins: [\n+    react(),\n+    tailwindcss()\n+  ],\n+})\n"
+                },
+                {
+                    "date": 1747278144796,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -5,45 +5,7 @@\n // https://vite.dev/config/\n export default defineConfig({\n   plugins: [\n     react(),\n-    tailwindcss()\n+    tailwindcss(),\n   ],\n })\n-import { defineConfig } from 'vite'\n-import react from '@vitejs/plugin-react'\n-\n-// https://vite.dev/config/\n-export default defineConfig({\n-  plugins: [\n-    react(),\n-    tailwindcss()\n-  ],\n-})\n-import { defineConfig } from 'vite'\n-import react from '@vitejs/plugin-react'\n-\n-// https://vite.dev/config/\n-export default defineConfig({\n-  plugins: [\n-    react(),\n-    tailwind()\n-  ],\n-})\n-import { defineConfig } from 'vite'\n-import react from '@vitejs/plugin-react'\n-\n-// https://vite.dev/config/\n-export default defineConfig({\n-  plugins: [\n-    react(),\n-    \n-  ],\n-})\n-import { defineConfig } from 'vite'\n-import react from '@vitejs/plugin-react'\n-\n-// https://vite.dev/config/\n-export default defineConfig({\n-  plugins: [\n-    react()],\n-})\n"
+                }
+            ],
+            "date": 1747278113149,
+            "name": "Commit-0",
+            "content": "import { defineConfig } from 'vite'\nimport react from '@vitejs/plugin-react'\n\n// https://vite.dev/config/\nexport default defineConfig({\n  plugins: [\n    react()],\n})\n"
+        }
+    ]
+}

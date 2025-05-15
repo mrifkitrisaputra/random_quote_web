@@ -1,0 +1,26 @@
+{
+    "sourceFile": "backand/services/admin_service.go",
+    "activeCommit": 0,
+    "commits": [
+        {
+            "activePatchIndex": 2,
+            "patches": [
+                {
+                    "date": 1747214016549,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n"
+                },
+                {
+                    "date": 1747214021962,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -3,9 +3,9 @@\n import (\r\n     \"database/sql\"\r\n     \"fmt\"\r\n \r\n-    \"quickpoll/config\"\r\n+    \"backand/config\"\r\n )\r\n \r\n func ClosePoll(pollID string) error {\r\n     _, err := config.DB.Exec(\"UPDATE polls SET status = 'closed' WHERE id = ?\", pollID)\r\n"
+                },
+                {
+                    "date": 1747214163749,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -1,9 +1,8 @@\n package services\r\n \r\n import (\r\n \r\n-\r\n     \"backand/config\"\r\n )\r\n \r\n func ClosePoll(pollID string) error {\r\n"
+                }
+            ],
+            "date": 1747214016549,
+            "name": "Commit-0",
+            "content": "package services\r\n\r\nimport (\r\n    \"database/sql\"\r\n    \"fmt\"\r\n\r\n    \"quickpoll/config\"\r\n)\r\n\r\nfunc ClosePoll(pollID string) error {\r\n    _, err := config.DB.Exec(\"UPDATE polls SET status = 'closed' WHERE id = ?\", pollID)\r\n    return err\r\n}\r\n\r\nfunc DeletePoll(pollID string) error {\r\n    tx, err := config.DB.Begin()\r\n    if err != nil {\r\n        return err\r\n    }\r\n\r\n    _, err = tx.Exec(\"DELETE FROM votes WHERE poll_id = ?\", pollID)\r\n    if err != nil {\r\n        tx.Rollback()\r\n        return err\r\n    }\r\n\r\n    _, err = tx.Exec(\"DELETE FROM poll_options WHERE poll_id = ?\", pollID)\r\n    if err != nil {\r\n        tx.Rollback()\r\n        return err\r\n    }\r\n\r\n    _, err = tx.Exec(\"DELETE FROM polls WHERE id = ?\", pollID)\r\n    if err != nil {\r\n        tx.Rollback()\r\n        return err\r\n    }\r\n\r\n    return tx.Commit()\r\n}"
+        }
+    ]
+}

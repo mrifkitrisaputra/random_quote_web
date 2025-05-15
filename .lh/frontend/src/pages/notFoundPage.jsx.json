@@ -1,0 +1,22 @@
+{
+    "sourceFile": "frontend/src/pages/notFoundPage.jsx",
+    "activeCommit": 0,
+    "commits": [
+        {
+            "activePatchIndex": 1,
+            "patches": [
+                {
+                    "date": 1747278727269,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n"
+                },
+                {
+                    "date": 1747280711443,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -4,12 +4,10 @@\n     return (\r\n         <div className=\"min-h-screen flex items-center justify-center bg-gray-50\">\r\n             <div className=\"text-center\">\r\n                 <h1 className=\"text-5xl font-bold text-red-600 mb-2\">404</h1>\r\n-                <p className=\"text-xl text-gray-700 mb-6\">Halaman tidak ditemukan</p>\r\n-                <a href=\"/\" className=\"text-blue-600 underline\">\r\n-                    Kembali ke halaman utama\r\n-                </a>\r\n+                <p className=\"text-xl mb-6\">Halaman tidak ditemukan</p>\r\n+                <a href=\"/\" className=\"text-blue-600 underline\">← Kembali ke Beranda</a>\r\n             </div>\r\n         </div>\r\n     );\r\n };\r\n"
+                }
+            ],
+            "date": 1747278727269,
+            "name": "Commit-0",
+            "content": "import React from 'react';\r\n\r\nconst NotFoundPage = () => {\r\n    return (\r\n        <div className=\"min-h-screen flex items-center justify-center bg-gray-50\">\r\n            <div className=\"text-center\">\r\n                <h1 className=\"text-5xl font-bold text-red-600 mb-2\">404</h1>\r\n                <p className=\"text-xl text-gray-700 mb-6\">Halaman tidak ditemukan</p>\r\n                <a href=\"/\" className=\"text-blue-600 underline\">\r\n                    Kembali ke halaman utama\r\n                </a>\r\n            </div>\r\n        </div>\r\n    );\r\n};\r\n\r\nexport default NotFoundPage;"
+        }
+    ]
+}

@@ -1,0 +1,18 @@
+{
+    "sourceFile": "frontend/src/assets/components/pollCard.jsx",
+    "activeCommit": 0,
+    "commits": [
+        {
+            "activePatchIndex": 0,
+            "patches": [
+                {
+                    "date": 1747278184038,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n"
+                }
+            ],
+            "date": 1747278184038,
+            "name": "Commit-0",
+            "content": "import axios from 'axios';\r\nimport { useState } from 'react';\r\n\r\nexport default function PollCard({ poll, onRefresh }) {\r\n    const toggleVisibility = async () => {\r\n        await axios.put(`/api/polls/${poll.id}/toggle-realtime`, {\r\n            allow_realtime: !poll.allow_realtime,\r\n        });\r\n        onRefresh();\r\n    };\r\n\r\n    const closePoll = async () => {\r\n        if (window.confirm(\"Tutup polling ini?\")) {\r\n            await axios.put(`/api/polls/${poll.id}/close`);\r\n            onRefresh();\r\n        }\r\n    };\r\n\r\n    const deletePoll = async () => {\r\n        if (window.confirm(\"Hapus polling ini?\")) {\r\n            await axios.delete(`/api/polls/${poll.id}`);\r\n            onRefresh();\r\n        }\r\n    };\r\n\r\n    return (\r\n        <div className=\"border p-4 mb-4 rounded shadow-sm\">\r\n            <h2 className=\"text-lg font-semibold\">{poll.title}</h2>\r\n            <p>{poll.description}</p>\r\n            <p>Status: <strong>{poll.status}</strong></p>\r\n            <p>Jumlah Suara: {poll.vote_count}</p>\r\n\r\n            <label className=\"flex items-center gap-2 mt-2\">\r\n                <input\r\n                    type=\"checkbox\"\r\n                    checked={poll.allow_realtime}\r\n                    onChange={toggleVisibility}\r\n                />\r\n                <span>Izinkan lihat hasil sebelum ditutup</span>\r\n            </label>\r\n\r\n            <div className=\"mt-4 flex gap-2\">\r\n                <button onClick={closePoll} className=\"bg-yellow-500 text-white px-3 py-1 rounded\">\r\n                    {poll.status === \"closed\" ? \"Sudah Ditutup\" : \"Tutup\"}\r\n                </button>\r\n                <button onClick={deletePoll} className=\"bg-red-600 text-white px-3 py-1 rounded\">\r\n                    Hapus\r\n                </button>\r\n                <a href={`/polls/${poll.id}`} className=\"bg-green-500 text-white px-3 py-1 rounded\">\r\n                    Lihat Detail\r\n                </a>\r\n            </div>\r\n        </div>\r\n    );\r\n}"
+        }
+    ]
+}

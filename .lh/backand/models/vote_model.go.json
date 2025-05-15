@@ -1,0 +1,22 @@
+{
+    "sourceFile": "backand/models/vote_model.go",
+    "activeCommit": 0,
+    "commits": [
+        {
+            "activePatchIndex": 1,
+            "patches": [
+                {
+                    "date": 1747213521830,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n"
+                },
+                {
+                    "date": 1747214590867,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -1,1 +1,18 @@\n-package models\n\\ No newline at end of file\n+package models\r\n+\r\n+import \"time\"\r\n+\r\n+// Vote merepresentasikan suara dari pengguna\r\n+type Vote struct {\r\n+    ID        int       `json:\"id\"`\r\n+    PollID    string    `json:\"poll_id\"`\r\n+    OptionID  int       `json:\"option_id\"`\r\n+    UserKey   string    `json:\"user_key\"`\r\n+    VotedAt   time.Time `json:\"voted_at\"`\r\n+}\r\n+\r\n+// VoteResult adalah hasil perhitungan suara\r\n+type VoteResult struct {\r\n+    OptionText string `json:\"option_text\"`\r\n+    TotalVotes int    `json:\"total_votes\"`\r\n+}\n\\ No newline at end of file\n"
+                }
+            ],
+            "date": 1747213521830,
+            "name": "Commit-0",
+            "content": "package models"
+        }
+    ]
+}

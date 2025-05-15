@@ -1,0 +1,30 @@
+{
+    "sourceFile": "frontend/src/pages/homepage.jsx",
+    "activeCommit": 0,
+    "commits": [
+        {
+            "activePatchIndex": 3,
+            "patches": [
+                {
+                    "date": 1747278668982,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n"
+                },
+                {
+                    "date": 1747279222768,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -1,6 +1,6 @@\n import React from 'react';\r\n-import Navbar from '../components/Navbar';\r\n+import Navbar from '../assets/components/Navbar';\r\n \r\n const HomePage = () => {\r\n     return (\r\n         <div className=\"min-h-screen bg-gray-50\">\r\n"
+                },
+                {
+                    "date": 1747279491072,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -1,6 +1,6 @@\n import React from 'react';\r\n-import Navbar from '../assets/components/Navbar';\r\n+import Navbar from '../components/navbar';\r\n \r\n const HomePage = () => {\r\n     return (\r\n         <div className=\"min-h-screen bg-gray-50\">\r\n"
+                },
+                {
+                    "date": 1747280702185,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -1,16 +1,13 @@\n import React from 'react';\r\n-import Navbar from '../components/navbar';\r\n \r\n const HomePage = () => {\r\n     return (\r\n         <div className=\"min-h-screen bg-gray-50\">\r\n-            <Navbar />\r\n-\r\n             <div className=\"container mx-auto px-4 py-12 text-center\">\r\n                 <h1 className=\"text-4xl font-bold mb-4\">Selamat Datang di QuickPoll</h1>\r\n                 <p className=\"text-lg text-gray-700 mb-8\">\r\n-                    Buat polling instan, bagikan tautan, dan kumpulkan suara dalam hitungan detik.\r\n+                    Buat polling instan, bagikan tautan, kumpulkan suara dalam hitungan detik.\r\n                 </p>\r\n \r\n                 <div className=\"flex flex-col md:flex-row gap-4 justify-center\">\r\n                     <a href=\"/create\" className=\"bg-blue-600 hover:bg-blue-700 text-white py-3 px-6 rounded text-lg\">\r\n"
+                }
+            ],
+            "date": 1747278668982,
+            "name": "Commit-0",
+            "content": "import React from 'react';\r\nimport Navbar from '../components/Navbar';\r\n\r\nconst HomePage = () => {\r\n    return (\r\n        <div className=\"min-h-screen bg-gray-50\">\r\n            <Navbar />\r\n\r\n            <div className=\"container mx-auto px-4 py-12 text-center\">\r\n                <h1 className=\"text-4xl font-bold mb-4\">Selamat Datang di QuickPoll</h1>\r\n                <p className=\"text-lg text-gray-700 mb-8\">\r\n                    Buat polling instan, bagikan tautan, dan kumpulkan suara dalam hitungan detik.\r\n                </p>\r\n\r\n                <div className=\"flex flex-col md:flex-row gap-4 justify-center\">\r\n                    <a href=\"/create\" className=\"bg-blue-600 hover:bg-blue-700 text-white py-3 px-6 rounded text-lg\">\r\n                        Buat Polling Baru\r\n                    </a>\r\n                    <a href=\"/dashboard\" className=\"bg-green-600 hover:bg-green-700 text-white py-3 px-6 rounded text-lg\">\r\n                        Dashboard Saya\r\n                    </a>\r\n                </div>\r\n            </div>\r\n        </div>\r\n    );\r\n};\r\n\r\nexport default HomePage;"
+        }
+    ]
+}

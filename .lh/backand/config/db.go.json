@@ -1,0 +1,54 @@
+{
+    "sourceFile": "backand/config/db.go",
+    "activeCommit": 0,
+    "commits": [
+        {
+            "activePatchIndex": 9,
+            "patches": [
+                {
+                    "date": 1747212913532,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n"
+                },
+                {
+                    "date": 1747212919459,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -10,9 +10,9 @@\n var DB *sql.DB\r\n \r\n func Connect() {\r\n     var err error\r\n-    dsn := \"root:@tcp(127.0.0.1:3306)/quickpoll?parseTime=true\"\r\n+    dsn := \"root:@tcp(127.0.0.1:3307)/quickpoll?parseTime=true\"\r\n     DB, err = sql.Open(\"mysql\", dsn)\r\n     if err != nil {\r\n         panic(err)\r\n     }\r\n"
+                },
+                {
+                    "date": 1747213312874,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -10,9 +10,9 @@\n var DB *sql.DB\r\n \r\n func Connect() {\r\n     var err error\r\n-    dsn := \"root:@tcp(127.0.0.1:3307)/quickpoll?parseTime=true\"\r\n+    dsn := \"root:@tcp(127.0.0.1:3307)/quiickpoll?parseTime=true\"\r\n     DB, err = sql.Open(\"mysql\", dsn)\r\n     if err != nil {\r\n         panic(err)\r\n     }\r\n"
+                },
+                {
+                    "date": 1747283567177,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -2,25 +2,25 @@\n \r\n import (\r\n     \"database/sql\"\r\n     \"fmt\"\r\n+    \"log\"\r\n \r\n     _ \"github.com/go-sql-driver/mysql\"\r\n )\r\n \r\n var DB *sql.DB\r\n \r\n-func Connect() {\r\n+func InitDB() {\r\n     var err error\r\n-    dsn := \"root:@tcp(127.0.0.1:3307)/quiickpoll?parseTime=true\"\r\n-    DB, err = sql.Open(\"mysql\", dsn)\r\n+    DB, err = sql.Open(\"mysql\", \"user:password@tcp(127.0.0.1:3306)/quickpoll\")\r\n     if err != nil {\r\n-        panic(err)\r\n+        log.Fatal(\"Gagal membuka koneksi ke database:\", err)\r\n     }\r\n \r\n     err = DB.Ping()\r\n     if err != nil {\r\n-        panic(err)\r\n+        log.Fatal(\"Database tidak bisa diakses:\", err)\r\n     }\r\n \r\n-    fmt.Println(\"Database connected\")\r\n+    fmt.Println(\"Berhasil terhubung ke database\")\r\n }\n\\ No newline at end of file\n"
+                },
+                {
+                    "date": 1747283572643,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -2,25 +2,25 @@\n \r\n import (\r\n     \"database/sql\"\r\n     \"fmt\"\r\n-    \"log\"\r\n \r\n     _ \"github.com/go-sql-driver/mysql\"\r\n )\r\n \r\n var DB *sql.DB\r\n \r\n-func InitDB() {\r\n+func Connect() {\r\n     var err error\r\n-    DB, err = sql.Open(\"mysql\", \"user:password@tcp(127.0.0.1:3306)/quickpoll\")\r\n+    dsn := \"root:@tcp(127.0.0.1:3307)/quiickpoll?parseTime=true\"\r\n+    DB, err = sql.Open(\"mysql\", dsn)\r\n     if err != nil {\r\n-        log.Fatal(\"Gagal membuka koneksi ke database:\", err)\r\n+        panic(err)\r\n     }\r\n \r\n     err = DB.Ping()\r\n     if err != nil {\r\n-        log.Fatal(\"Database tidak bisa diakses:\", err)\r\n+        panic(err)\r\n     }\r\n \r\n-    fmt.Println(\"Berhasil terhubung ke database\")\r\n+    fmt.Println(\"Database connected\")\r\n }\n\\ No newline at end of file\n"
+                },
+                {
+                    "date": 1747283594398,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -2,25 +2,25 @@\n \r\n import (\r\n     \"database/sql\"\r\n     \"fmt\"\r\n+    \"log\"\r\n \r\n     _ \"github.com/go-sql-driver/mysql\"\r\n )\r\n \r\n var DB *sql.DB\r\n \r\n-func Connect() {\r\n+func InitDB() {\r\n     var err error\r\n-    dsn := \"root:@tcp(127.0.0.1:3307)/quiickpoll?parseTime=true\"\r\n-    DB, err = sql.Open(\"mysql\", dsn)\r\n+    DB, err = sql.Open(\"mysql\", \"root:@tcp(127.0.0.1:3306)/quickpoll\")\r\n     if err != nil {\r\n-        panic(err)\r\n+        log.Fatal(\"Gagal membuka koneksi ke database:\", err)\r\n     }\r\n \r\n     err = DB.Ping()\r\n     if err != nil {\r\n-        panic(err)\r\n+        log.Fatal(\"Database tidak bisa diakses:\", err)\r\n     }\r\n \r\n-    fmt.Println(\"Database connected\")\r\n+    fmt.Println(\"Berhasil terhubung ke database\")\r\n }\n\\ No newline at end of file\n"
+                },
+                {
+                    "date": 1747283605907,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -11,9 +11,9 @@\n var DB *sql.DB\r\n \r\n func InitDB() {\r\n     var err error\r\n-    DB, err = sql.Open(\"mysql\", \"root:@tcp(127.0.0.1:3306)/quickpoll\")\r\n+    DB, err = sql.Open(\"mysql\", \"root:@tcp(127.0.0.1:3307)/quickpoll\")\r\n     if err != nil {\r\n         log.Fatal(\"Gagal membuka koneksi ke database:\", err)\r\n     }\r\n \r\n"
+                },
+                {
+                    "date": 1747286302100,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -2,25 +2,25 @@\n \r\n import (\r\n     \"database/sql\"\r\n     \"fmt\"\r\n-    \"log\"\r\n \r\n     _ \"github.com/go-sql-driver/mysql\"\r\n )\r\n \r\n var DB *sql.DB\r\n \r\n-func InitDB() {\r\n+func Connect() {\r\n     var err error\r\n-    DB, err = sql.Open(\"mysql\", \"root:@tcp(127.0.0.1:3307)/quickpoll\")\r\n+    dsn := \"root:@tcp(127.0.0.1:3307)/quiickpoll?parseTime=true\"\r\n+    DB, err = sql.Open(\"mysql\", dsn)\r\n     if err != nil {\r\n-        log.Fatal(\"Gagal membuka koneksi ke database:\", err)\r\n+        panic(err)\r\n     }\r\n \r\n     err = DB.Ping()\r\n     if err != nil {\r\n-        log.Fatal(\"Database tidak bisa diakses:\", err)\r\n+        panic(err)\r\n     }\r\n \r\n-    fmt.Println(\"Berhasil terhubung ke database\")\r\n+    fmt.Println(\"Database connected\")\r\n }\n\\ No newline at end of file\n"
+                },
+                {
+                    "date": 1747286333316,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -2,25 +2,25 @@\n \r\n import (\r\n     \"database/sql\"\r\n     \"fmt\"\r\n+    \"log\"\r\n \r\n     _ \"github.com/go-sql-driver/mysql\"\r\n )\r\n \r\n var DB *sql.DB\r\n \r\n-func Connect() {\r\n+func InitDB() {\r\n     var err error\r\n-    dsn := \"root:@tcp(127.0.0.1:3307)/quiickpoll?parseTime=true\"\r\n-    DB, err = sql.Open(\"mysql\", dsn)\r\n+    DB, err = sql.Open(\"mysql\", \"root:@tcp(127.0.0.1:3307)/quiickpoll\")\r\n     if err != nil {\r\n-        panic(err)\r\n+        log.Fatal(\"Gagal membuka koneksi ke database:\", err)\r\n     }\r\n \r\n     err = DB.Ping()\r\n     if err != nil {\r\n-        panic(err)\r\n+        log.Fatal(\"Database tidak bisa diakses:\", err)\r\n     }\r\n \r\n-    fmt.Println(\"Database connected\")\r\n+    fmt.Println(\"Berhasil terhubung ke database\")\r\n }\n\\ No newline at end of file\n"
+                },
+                {
+                    "date": 1747286396608,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -2,25 +2,25 @@\n \r\n import (\r\n     \"database/sql\"\r\n     \"fmt\"\r\n-    \"log\"\r\n \r\n     _ \"github.com/go-sql-driver/mysql\"\r\n )\r\n \r\n var DB *sql.DB\r\n \r\n-func InitDB() {\r\n+func Connect() {\r\n     var err error\r\n-    DB, err = sql.Open(\"mysql\", \"root:@tcp(127.0.0.1:3307)/quiickpoll\")\r\n+    dsn := \"root:@tcp(127.0.0.1:3307)/quiickpoll?parseTime=true\"\r\n+    DB, err = sql.Open(\"mysql\", dsn)\r\n     if err != nil {\r\n-        log.Fatal(\"Gagal membuka koneksi ke database:\", err)\r\n+        panic(err)\r\n     }\r\n \r\n     err = DB.Ping()\r\n     if err != nil {\r\n-        log.Fatal(\"Database tidak bisa diakses:\", err)\r\n+        panic(err)\r\n     }\r\n \r\n-    fmt.Println(\"Berhasil terhubung ke database\")\r\n+    fmt.Println(\"Database connected\")\r\n }\n\\ No newline at end of file\n"
+                }
+            ],
+            "date": 1747212913532,
+            "name": "Commit-0",
+            "content": "package config\r\n\r\nimport (\r\n    \"database/sql\"\r\n    \"fmt\"\r\n\r\n    _ \"github.com/go-sql-driver/mysql\"\r\n)\r\n\r\nvar DB *sql.DB\r\n\r\nfunc Connect() {\r\n    var err error\r\n    dsn := \"root:@tcp(127.0.0.1:3306)/quickpoll?parseTime=true\"\r\n    DB, err = sql.Open(\"mysql\", dsn)\r\n    if err != nil {\r\n        panic(err)\r\n    }\r\n\r\n    err = DB.Ping()\r\n    if err != nil {\r\n        panic(err)\r\n    }\r\n\r\n    fmt.Println(\"Database connected\")\r\n}"
+        }
+    ]
+}

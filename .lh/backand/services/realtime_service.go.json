@@ -1,0 +1,22 @@
+{
+    "sourceFile": "backand/services/realtime_service.go",
+    "activeCommit": 0,
+    "commits": [
+        {
+            "activePatchIndex": 1,
+            "patches": [
+                {
+                    "date": 1747241519117,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n"
+                },
+                {
+                    "date": 1747241526265,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -0,0 +1,28 @@\n+package services\r\n+\r\n+import (\r\n+    \"fmt\"\r\n+\r\n+    \"backand/config\"\r\n+)\r\n+\r\n+func UpdateAllowRealtime(pollID string, allow bool) error {\r\n+    // Cek apakah polling masih terbuka\r\n+    var status string\r\n+    err := config.DB.QueryRow(\"SELECT status FROM polls WHERE id = ?\", pollID).Scan(&status)\r\n+    if err != nil {\r\n+        return fmt.Errorf(\"poll not found\")\r\n+    }\r\n+\r\n+    if status != \"open\" {\r\n+        return fmt.Errorf(\"only open polls can change realtime visibility\")\r\n+    }\r\n+\r\n+    // Update kolom allow_realtime_results\r\n+    _, err = config.DB.Exec(\"UPDATE polls SET allow_realtime_results = ? WHERE id = ?\", allow, pollID)\r\n+    if err != nil {\r\n+        return err\r\n+    }\r\n+\r\n+    return nil\r\n+}\n\\ No newline at end of file\n"
+                }
+            ],
+            "date": 1747241519117,
+            "name": "Commit-0",
+            "content": "package services\r\n\r\nimport (\r\n    \"database/sql\"\r\n    \"fmt\"\r\n\r\n    \"backand/config\"\r\n)\r\n\r\nfunc UpdateAllowRealtime(pollID string, allow bool) error {\r\n    // Cek apakah polling masih terbuka\r\n    var status string\r\n    err := config.DB.QueryRow(\"SELECT status FROM polls WHERE id = ?\", pollID).Scan(&status)\r\n    if err != nil {\r\n        return fmt.Errorf(\"poll not found\")\r\n    }\r\n\r\n    if status != \"open\" {\r\n        return fmt.Errorf(\"only open polls can change realtime visibility\")\r\n    }\r\n\r\n    // Update kolom allow_realtime_results\r\n    _, err = config.DB.Exec(\"UPDATE polls SET allow_realtime_results = ? WHERE id = ?\", allow, pollID)\r\n    if err != nil {\r\n        return err\r\n    }\r\n\r\n    return nil\r\n}"
+        }
+    ]
+}

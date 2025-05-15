@@ -1,0 +1,18 @@
+{
+    "sourceFile": "backand/config/migrate.go",
+    "activeCommit": 0,
+    "commits": [
+        {
+            "activePatchIndex": 0,
+            "patches": [
+                {
+                    "date": 1747212882198,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n"
+                }
+            ],
+            "date": 1747212882198,
+            "name": "Commit-0",
+            "content": "package config\r\n\r\nimport (\r\n    \"database/sql\"\r\n    \"fmt\"\r\n\r\n    \"github.com/golang-migrate/migrate/v4\"\r\n    \"github.com/golang-migrate/migrate/v4/database/mysql\"\r\n    _ \"github.com/golang-migrate/migrate/v4/source/file\"\r\n)\r\n\r\nfunc RunMigrations(db *sql.DB) error {\r\n    driver, err := mysql.WithInstance(db, &mysql.Config{})\r\n    if err != nil {\r\n        return err\r\n    }\r\n\r\n    m, err := migrate.NewWithDatabaseInstance(\r\n        \"file://migrations\",\r\n        \"mysql\",\r\n        driver,\r\n    )\r\n    if err != nil {\r\n        return err\r\n    }\r\n\r\n    err = m.Up()\r\n    if err != nil && err != migrate.ErrNoChange {\r\n        return err\r\n    }\r\n\r\n    fmt.Println(\"✅ Database migrated successfully\")\r\n    return nil\r\n}"
+        }
+    ]
+}
